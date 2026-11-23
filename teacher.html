@@ -1,0 +1,350 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trang giáo viên – Vương Quốc Tam Giác Bằng Nhau</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#0f6b62; --teal-dark:#0b514a; --teal-soft:#e4f1ee; --red:#c9473f; --gold:#fdebc0;
+    --ink:#1d2b2a; --muted:#5d6f6d; --line:#d9e4e2; --bg:#f6f9f8; --card:#fff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif;font-size:16px;line-height:1.5}
+  .wrap{max-width:1040px;margin:0 auto;padding:22px 16px 60px}
+  h1,h2{font-family:Lora,Georgia,"Times New Roman",serif;color:var(--teal);margin:0}
+  h1{font-size:28px} h2{font-size:23px;margin:34px 0 12px}
+  .sub{color:var(--muted);margin:4px 0 16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:0 1px 3px rgba(15,107,98,.06)}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  select,input[type=text],input[type=password]{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink)}
+  button{font:inherit;font-weight:600;padding:8px 14px;border-radius:9px;border:1px solid var(--teal);background:var(--teal);color:#fff;cursor:pointer}
+  button.ghost{background:#fff;color:var(--teal)}
+  button:hover{filter:brightness(1.07)}
+  .status{font-size:14px;color:var(--muted);margin-top:8px;min-height:20px}
+  .setup{display:grid;grid-template-columns:1fr 200px;gap:10px;margin-top:12px}
+  .setup[hidden]{display:none}
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+  .kpi{background:var(--teal-soft);border-radius:14px;border-top:4px solid var(--teal);padding:16px 18px}
+  .kpi b{display:block;font-family:Lora,Georgia,serif;font-size:36px;color:var(--teal-dark);line-height:1.1}
+  .kpi b small{font-size:20px;color:var(--teal);font-weight:600}
+  .kpi span{color:var(--muted);font-size:14px}
+  .classes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:14px}
+  .cls{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .cls .top{display:flex;justify-content:space-between;gap:8px;font-size:15px}
+  .cls .top strong{font-family:Lora,Georgia,serif;font-size:21px}
+  .cls small{color:var(--muted)}
+  .track{height:10px;background:#e5ecea;border-radius:8px;overflow:hidden;margin-top:8px}
+  .track i{display:block;height:100%;border-radius:8px}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+  .legend span::before{content:"";display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;background:var(--c)}
+  .chart-row{display:grid;grid-template-columns:230px 1fr;gap:12px;align-items:center;margin:12px 0}
+  .chart-row .lbl{text-align:right;font-weight:600;font-size:15px}
+  .bar{display:flex;align-items:center;gap:8px;margin:2px 0}
+  .bar i{display:block;height:15px;border-radius:0 5px 5px 0;min-width:3px}
+  .bar em{font-style:normal;font-weight:700;font-size:13px}
+  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;font-size:15px}
+  th{background:var(--teal-soft);color:var(--teal-dark);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase}
+  tr:last-child td{border-bottom:0}
+  .chip{display:inline-block;background:var(--gold);border-radius:7px;padding:2px 9px;margin:2px 4px 2px 0;font-size:14px;white-space:nowrap}
+  .ok{color:var(--teal)}
+  .bad{color:var(--red);font-weight:700}
+  .scroll{overflow-x:auto}
+  .rank{font-weight:700;color:var(--teal)}
+  .empty{color:var(--muted);text-align:center;padding:18px}
+  .note{font-size:13.5px;color:var(--muted);margin-top:8px}
+  @media(max-width:720px){
+    .kpis{grid-template-columns:1fr}
+    .chart-row{grid-template-columns:1fr}.chart-row .lbl{text-align:left}
+    .setup{grid-template-columns:1fr}
+    h1{font-size:23px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Trang giáo viên</h1>
+  <p class="sub">Vương Quốc Tam Giác Bằng Nhau • Toán 7 KNTT – kết quả tự gửi về từ máy học sinh; thầy/cô không phải nhập điểm hay thu bài.</p>
+
+  <div class="card">
+    <div class="toolbar">
+      <select id="clsFilter" aria-label="Chọn lớp"></select>
+      <button id="btnLoad">🔄 Tải kết quả</button>
+      <button class="ghost" id="btnCsv">📥 Xuất Excel (CSV)</button>
+      <button class="ghost" id="btnDemo">👀 Xem dữ liệu mẫu</button>
+      <label style="font-size:14px"><input type="checkbox" id="chkAuto"> tự cập nhật mỗi phút</label>
+    </div>
+    <div class="setup" id="setup" hidden>
+      <input type="text" id="inUrl" placeholder="https://script.google.com/macros/s/AKfycbyAtwLPcs7KaKs9fV1haV-KpDxX8i1dfhrSw5xxxytqv6Ip-HvKuEx_frXoAZoNnhpDgw/exec">
+      <input type="password" id="inKey" placeholder="Mật khẩu giáo viên">
+    </div>
+    <div class="status" id="status"></div>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+  <div class="classes" id="classProg"></div>
+
+  <h2>Bảng điểm học sinh</h2>
+  <div class="scroll"><table id="tblScore"><thead><tr><th>Họ tên</th><th>Lớp</th><th>Ải 1</th><th>Ải 2</th><th>Ải 3</th><th>Ải 4</th><th>Đúng /40</th><th>Câu hỏi /8</th><th>XP–vàng /2</th><th>Tổng /10</th><th>Xếp loại</th></tr></thead><tbody></tbody></table></div>
+  <p class="note">Điểm mỗi ải = số câu đúng /10 (lấy lần làm tốt nhất). Tổng /10 đúng như điểm hiển thị trong trò chơi. Xếp loại: ≥9 Xuất sắc · ≥8 Giỏi · ≥6,5 Khá · ≥5 Đạt · dưới 5 Chưa đạt.</p>
+
+  <h2>Tỉ lệ làm sai theo dạng bài</h2>
+  <div class="card">
+    <div class="legend" id="legend" style="justify-content:flex-end"></div>
+    <div id="chart"></div>
+  </div>
+
+  <h2>Dạng cả lớp sai nhiều nhất</h2>
+  <p class="sub" style="margin-top:-6px">Kèm tên những em cần hỗ trợ ở từng dạng (làm đúng dưới 70%, đã làm từ 2 câu trở lên).</p>
+  <div class="scroll"><table id="tblSupport"><thead><tr><th style="width:36%">Dạng bài</th><th>Cần hỗ trợ</th></tr></thead><tbody></tbody></table></div>
+
+  <h2>Dạng yếu nhất của từng người</h2>
+  <div class="scroll"><table id="tblWeak"><thead><tr><th>Học sinh</th><th>Lớp</th><th>Dạng yếu nhất</th><th>Tỉ lệ sai</th></tr></thead><tbody></tbody></table></div>
+
+  <h2>Bảng xếp hạng</h2>
+  <div class="scroll"><table id="tblRank"><thead><tr><th>#</th><th>Tên</th><th>Lớp</th><th>Cấp độ</th><th>Số sao</th><th>Điểm /10</th><th>XP</th><th>Cập nhật</th></tr></thead><tbody></tbody></table></div>
+  <p class="note">Số sao = số ải (vùng đất) em đã vượt qua. Điểm /10 = điểm câu hỏi (tối đa 8) + điểm XP–vàng (tối đa 2), đúng theo cách tính trong trò chơi.</p>
+</div>
+
+<script>
+/* =================== CẤU HÌNH – THẦY/CÔ CHỈ CẦN SỬA Ở ĐÂY =================== */
+const CONFIG = {
+  GAS_URL: "https://script.google.com/macros/s/AKfycbyAtwLPcs7KaKs9fV1haV-KpDxX8i1dfhrSw5xxxytqv6Ip-HvKuEx_frXoAZoNnhpDgw/exec",                      // dán URL Apps Script (/exec) vào đây để khỏi phải nhập mỗi lần
+  CLASS_SIZES: { "7A": 32, "7B": 32, "7C": 32, "7D": 32, "7E": 30 },   // sĩ số từng lớp
+  PASS_ACCURACY: 0.7,               // dưới 70% đúng thì "cần hỗ trợ"
+  MIN_ATTEMPTS: 2                   // phải làm ít nhất 2 câu của dạng đó mới xét
+};
+
+/*LOGIC*/
+const SKILLS = [
+  { k: "D1", name: "Tổng ba góc & phân loại tam giác" },
+  { k: "D2", name: "Góc ngoài của tam giác" },
+  { k: "D3", name: "Hai tam giác bằng nhau & yếu tố tương ứng" },
+  { k: "D4", name: "Các trường hợp c.c.c – c.g.c – g.c.g" },
+  { k: "D5", name: "Tam giác vuông bằng nhau" },
+  { k: "D6", name: "Chứng minh hình (phân giác, đường cao, song song)" },
+  { k: "D7", name: "Tam giác cân, đều, vuông cân" },
+  { k: "D8", name: "Đường trung trực & tổng hợp" }
+];
+const CLASS_COLORS = ["#c9473f", "#0f6b62", "#d29a1a", "#3b6fb6", "#7a4fa3", "#2f9e6f"];
+
+function esc(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+function recQuestions(r) {
+  let n = 0;
+  if (r.skillStats) Object.keys(r.skillStats).forEach(k => { n += (r.skillStats[k].total || 0); });
+  else if (r.topicStats) Object.keys(r.topicStats).forEach(k => { n += (r.topicStats[k].total || 0); });
+  return n;
+}
+function starsOf(r) {
+  let n = 0;
+  if (r.stageBest) Object.keys(r.stageBest).forEach(k => { if (r.stageBest[k] && r.stageBest[k].passed) n++; });
+  else n = r.completedStages || 0;
+  return n;
+}
+function classList(records) {
+  const set = new Set(Object.keys(CONFIG.CLASS_SIZES));
+  records.forEach(r => r.className && set.add(r.className));
+  return ["7A", "7B", "7C", "7D", "7E"];
+}
+
+/** Tổng hợp mọi số liệu cho một lớp (hoặc ALL). */
+function aggregate(records, filter) {
+  const recs = filter === "ALL" ? records : records.filter(r => r.className === filter);
+  const classes = filter === "ALL" ? classList(records) : [filter];
+  const sizeSum = classes.reduce((a, c) => a + (CONFIG.CLASS_SIZES[c] || 0), 0);
+
+  const byClass = {};
+  classes.forEach(c => { byClass[c] = { n: 0, q: 0, size: CONFIG.CLASS_SIZES[c] || 0 }; });
+  const skill = {};
+  SKILLS.forEach(s => { skill[s.k] = { all: { right: 0, total: 0 }, cls: {}, support: [] }; });
+  const weakest = [];
+  let finished4 = 0, questions = 0;
+
+  recs.forEach(r => {
+    const q = recQuestions(r);
+    questions += q;
+    if (byClass[r.className]) { byClass[r.className].n++; byClass[r.className].q += q; }
+    if (starsOf(r) >= 4) finished4++;
+    let worst = null;
+    SKILLS.forEach(s => {
+      const st = r.skillStats && r.skillStats[s.k];
+      if (!st || !st.total) return;
+      const bucket = skill[s.k];
+      bucket.all.right += st.right; bucket.all.total += st.total;
+      const cb = bucket.cls[r.className] || (bucket.cls[r.className] = { right: 0, total: 0 });
+      cb.right += st.right; cb.total += st.total;
+      if (st.total >= CONFIG.MIN_ATTEMPTS) {
+        const acc = st.right / st.total;
+        if (acc < CONFIG.PASS_ACCURACY) bucket.support.push({ name: r.name, cls: r.className, err: Math.round((1 - acc) * 100) });
+        if (!worst || acc < worst.acc) worst = { acc, k: s.k, err: Math.round((1 - acc) * 100) };
+      }
+    });
+    if (worst) weakest.push({ name: r.name, cls: r.className, k: worst.k, err: worst.err });
+  });
+
+  const errOf = b => b.total ? (b.total - b.right) / b.total : 0;
+  const order = SKILLS.map(s => s.k).sort((a, b) => errOf(skill[b].all) - errOf(skill[a].all));
+  const rank = recs.slice().sort((a, b) => (b.total10 || 0) - (a.total10 || 0) || (b.xp || 0) - (a.xp || 0));
+  weakest.sort((a, b) => b.err - a.err);
+  return { recs, classes, sizeSum, byClass, skill, order, weakest, rank, finished4, questions, errOf };
+}
+
+function stageScore(r, k) { const b = r.stageBest && r.stageBest[k]; return b && b.score != null ? b.score : null; }
+function grade(t) { return t >= 9 ? "Xuất sắc" : t >= 8 ? "Giỏi" : t >= 6.5 ? "Khá" : t >= 5 ? "Đạt" : "Chưa đạt"; }
+function avg10(list) { return list.length ? list.reduce((a, r) => a + (+r.total10 || 0), 0) / list.length : 0; }
+/*ENDLOGIC*/
+
+/* =================== DỮ LIỆU MẪU (để xem thử giao diện) =================== */
+function demoData() {
+  const names = ["Nguyễn Văn An", "Trần Thị Bình", "Lê Quang Huy", "Phạm Ngọc Mai", "Hoàng Gia Bảo", "Vũ Thùy Linh", "Đặng Minh Khôi", "Bùi Thảo Vy",
+    "Đỗ Đức Anh", "Ngô Khánh Chi", "Dương Hải Nam", "Lý Phương Thảo", "Phan Tuấn Kiệt", "Trương Mỹ Duyên", "Võ Quốc Việt", "Cao Hà My"];
+  const recs = [];
+  ["7A", "7B"].forEach((cls, ci) => {
+    names.forEach((nm, i) => {
+      if ((i + ci) % 3 === 2) return;
+      const skillStats = {};
+      SKILLS.forEach((s, si) => {
+        const total = 3 + Math.floor(Math.random() * 6);
+        const base = ci === 0 ? 0.78 : 0.55;
+        const right = Math.max(0, Math.min(total, Math.round(total * (base - si * 0.03 + (Math.random() - 0.5) * 0.4))));
+        skillStats[s.k] = { right, total };
+      });
+      const stars = Math.floor(Math.random() * 5);
+      const stageBest = {}; let c40 = 0; for (let k = 1; k <= 4; k++) { const sc = k <= stars ? 5 + Math.floor(Math.random() * 6) : 0; c40 += sc; stageBest[k] = { passed: k <= stars, score: sc }; }
+      const xp = 400 + Math.floor(Math.random() * 5200);
+      const t10 = Math.round((3 + Math.random() * 6.5) * 10) / 10;
+      recs.push({ name: nm + (ci ? " (B)" : ""), className: cls, level: Math.floor(xp / 1000) + 1, xp, total10: t10, totalCorrect40: c40, quizPoints: Math.round(c40 * 2) / 10, bonusPoints: Math.min(2, Math.round(xp / 30) / 10), completedStages: stars, stageBest, skillStats, updated: "mẫu" });
+    });
+  });
+  return recs;
+}
+
+/* =================== GIAO DIỆN =================== */
+const $ = id => document.getElementById(id);
+let RECORDS = [];
+let timer = null;
+
+function render() {
+  const sel = $("clsFilter"), cur = sel.value;
+  const cl = classList(RECORDS);
+  sel.innerHTML = '<option value="ALL">Tất cả các lớp</option>' + cl.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join("");
+  sel.value = cur === "ALL" || cl.includes(cur) ? cur : "ALL";
+  const A = aggregate(RECORDS, sel.value);
+  const pct = A.sizeSum ? Math.round(A.recs.length / A.sizeSum * 100) : 0;
+
+  $("kpis").innerHTML = `
+    <div class="kpi"><b>${A.recs.length}<small>/${A.sizeSum} em</small></b><span>đã chơi ở nhà (${pct}% ${sel.value === "ALL" ? "các lớp" : "lớp " + esc(sel.value)})</span></div>
+    <div class="kpi"><b>${A.questions.toLocaleString("vi-VN")}</b><span>câu hỏi các em đã tự làm</span></div>
+    <div class="kpi"><b>${A.finished4}<small> em</small></b><span>đã đi hết cả 4/4 vùng đất</span></div>`;
+
+  $("classProg").innerHTML = A.classes.map((c, i) => {
+    const b = A.byClass[c], w = b.size ? Math.min(100, Math.round(b.n / b.size * 100)) : 0;
+    return `<div class="cls"><div class="top"><strong>${esc(c)}</strong><span><b>${b.n}/${b.size} em</b> đã chơi · ${b.q.toLocaleString("vi-VN")} câu</span></div>
+      <small>sĩ số ${b.size} · ĐTB ${avg10(A.recs.filter(r => r.className === c)).toFixed(1)}</small><div class="track"><i style="width:${w}%;background:${CLASS_COLORS[i % CLASS_COLORS.length]}"></i></div></div>`;
+  }).join("");
+
+  const sorted = A.recs.slice().sort((a, b) => String(a.className).localeCompare(b.className) || String(a.name).localeCompare(b.name, "vi"));
+  const cell = v => v === null ? '<td style="color:#aaa">–</td>' : `<td>${v}</td>`;
+  let body = sorted.map(r => {
+    const t = +r.total10 || 0;
+    return `<tr><td><b>${esc(r.name)}</b></td><td>${esc(r.className)}</td>${[1, 2, 3, 4].map(k => cell(stageScore(r, k))).join("")}
+      <td>${r.totalCorrect40 || 0}</td><td>${(+r.quizPoints || 0).toFixed(1)}</td><td>${(+r.bonusPoints || 0).toFixed(1)}</td>
+      <td class="${t < 5 ? "bad" : "ok"}"><b>${t.toFixed(1)}</b></td><td>${grade(t)}</td></tr>`;
+  }).join("");
+  if (sorted.length) body += `<tr style="background:var(--teal-soft)"><td colspan="9"><b>Điểm trung bình ${sel.value === "ALL" ? "các lớp" : "lớp " + esc(sel.value)} (${sorted.length} em)</b></td><td><b>${avg10(sorted).toFixed(1)}</b></td><td></td></tr>`;
+  $("tblScore").querySelector("tbody").innerHTML = body || '<tr><td colspan="11" class="empty">Chưa có dữ liệu.</td></tr>';
+
+  // biểu đồ cột nhóm
+  const activeCls = A.classes.filter(c => A.recs.some(r => r.className === c));
+  $("legend").innerHTML = activeCls.map(c => `<span style="--c:${CLASS_COLORS[A.classes.indexOf(c) % CLASS_COLORS.length]}">${esc(c)}</span>`).join("");
+  $("chart").innerHTML = A.recs.length === 0 ? '<div class="empty">Chưa có dữ liệu. Bấm “Tải kết quả” hoặc “Xem dữ liệu mẫu”.</div>' :
+    A.order.map(k => {
+      const s = SKILLS.find(x => x.k === k);
+      const bars = activeCls.map(c => {
+        const b = A.skill[k].cls[c];
+        const e = b ? Math.round(A.errOf(b) * 100) : null;
+        const col = CLASS_COLORS[A.classes.indexOf(c) % CLASS_COLORS.length];
+        return e === null ? "" : `<div class="bar"><i style="width:${Math.max(1, e) * 0.78}%;background:${col}"></i><em>${e}%</em></div>`;
+      }).join("");
+      return `<div class="chart-row"><div class="lbl">${esc(s.name)}</div><div>${bars}</div></div>`;
+    }).join("");
+
+  // dạng cả lớp sai nhiều nhất + em cần hỗ trợ
+  $("tblSupport").querySelector("tbody").innerHTML = A.recs.length === 0 ? '<tr><td colspan="2" class="empty">Chưa có dữ liệu.</td></tr>' :
+    A.order.map(k => {
+      const s = SKILLS.find(x => x.k === k), b = A.skill[k];
+      const e = Math.round(A.errOf(b.all) * 100);
+      const chips = b.support.length ? b.support.sort((x, y) => y.err - x.err).map(p => `<span class="chip">${esc(p.name)}${A.classes.length > 1 ? " · " + esc(p.cls) : ""} (${p.err}%)</span>`).join("")
+        : '<span class="ok">✅ Chưa có em nào cần hỗ trợ</span>';
+      return `<tr><td><b>${esc(s.name)}</b><br><span class="${e >= 40 ? "bad" : ""}" style="font-size:13.5px">cả lớp sai ${e}%</span></td><td>${chips}</td></tr>`;
+    }).join("");
+
+  $("tblWeak").querySelector("tbody").innerHTML = A.weakest.length === 0 ? '<tr><td colspan="4" class="empty">Chưa có em nào làm đủ số câu để xác định dạng yếu.</td></tr>' :
+    A.weakest.map(w => `<tr><td>${esc(w.name)}</td><td>${esc(w.cls)}</td><td>${esc(SKILLS.find(x => x.k === w.k).name)}</td><td class="${w.err >= 50 ? "bad" : ""}">${w.err}%</td></tr>`).join("");
+
+  $("tblRank").querySelector("tbody").innerHTML = A.rank.length === 0 ? '<tr><td colspan="8" class="empty">Chưa có dữ liệu học sinh.</td></tr>' :
+    A.rank.map((r, i) => `<tr><td class="rank">${i + 1}</td><td><b>${esc(r.name)}</b></td><td>${esc(r.className)}</td><td>${esc(r.level || Math.floor((r.xp || 0) / 1000) + 1)}</td>
+      <td>${"⭐".repeat(starsOf(r)) || "–"}</td><td><b>${(+r.total10 || 0).toFixed(1)}</b></td><td>${(+r.xp || 0).toLocaleString("vi-VN")}</td><td style="font-size:13px;color:var(--muted)">${esc(r.updated || r.timestamp || "")}</td></tr>`).join("");
+}
+
+function setStatus(t) { $("status").textContent = t; }
+
+async function load() {
+  const url = (CONFIG.GAS_URL || $("inUrl").value).trim();
+  const key = $("inKey").value.trim();
+  if (!url) { $("setup").hidden = false; setStatus("ℹ️ Hãy dán URL Apps Script và mật khẩu giáo viên, rồi bấm “Tải kết quả”."); return; }
+  if (!key) { $("setup").hidden = false; setStatus("ℹ️ Hãy nhập mật khẩu giáo viên."); return; }
+  try { localStorage.setItem("gv_url", url); localStorage.setItem("gv_key", key); } catch (e) {}
+  setStatus("⏳ Đang tải kết quả từ Google Sheets…");
+  try {
+    const res = await fetch(url + (url.includes("?") ? "&" : "?") + "key=" + encodeURIComponent(key), { cache: "no-store" });
+    const data = await res.json();
+    if (Array.isArray(data)) {
+      RECORDS = data;
+      setStatus(`✅ Đã tải ${data.length} học sinh • cập nhật lúc ${new Date().toLocaleTimeString("vi-VN")}`);
+      render();
+    } else setStatus("⚠️ " + (data.error || "Không đọc được dữ liệu"));
+  } catch (e) {
+    setStatus("⚠️ Không kết nối được. Kiểm tra URL /exec và quyền truy cập “Anyone” của Web app.");
+  }
+}
+
+function exportCsv() {
+  if (!RECORDS.length) { alert("Chưa có dữ liệu để xuất!"); return; }
+  const q = v => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
+  let csv = "\uFEFFHọ và tên,Lớp,Cấp độ,Số sao,Ải 1,Ải 2,Ải 3,Ải 4,Số câu đúng (/40),Điểm câu hỏi (/8),Điểm XP-vàng (/2),Tổng điểm (/10),XP,Vàng,Dạng yếu nhất,Cập nhật\n";
+  RECORDS.forEach(r => {
+    const A = aggregate([r], "ALL"); const w = A.weakest[0];
+    csv += [q(r.name), q(r.className), r.level || "", starsOf(r), stageScore(r,1) ?? "", stageScore(r,2) ?? "", stageScore(r,3) ?? "", stageScore(r,4) ?? "", r.totalCorrect40 || 0, (+r.quizPoints || 0).toFixed(1), (+r.bonusPoints || 0).toFixed(1),
+      (+r.total10 || 0).toFixed(1), r.xp || 0, r.gold || 0, q(w ? SKILLS.find(x => x.k === w.k).name : ""), q(r.updated || r.timestamp || "")].join(",") + "\n";
+  });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8;" }));
+  a.download = "Thong_Ke_Tam_Giac_Bang_Nhau_Toan7.csv";
+  a.click();
+}
+
+$("btnLoad").onclick = load;
+$("btnCsv").onclick = exportCsv;
+$("btnDemo").onclick = () => { RECORDS = demoData(); setStatus("👀 Đang hiển thị DỮ LIỆU MẪU (không phải kết quả thật)."); render(); };
+$("clsFilter").onchange = render;
+$("chkAuto").onchange = e => { clearInterval(timer); if (e.target.checked) timer = setInterval(load, 60000); };
+
+(function init() {
+  try { $("inUrl").value = localStorage.getItem("gv_url") || ""; $("inKey").value = localStorage.getItem("gv_key") || ""; } catch (e) {}
+  const haveUrl = !!(CONFIG.GAS_URL || $("inUrl").value);
+  if (CONFIG.GAS_URL) { $("inUrl").style.display = "none"; $("setup").style.gridTemplateColumns = "1fr"; }
+  $("setup").hidden = haveUrl && !!$("inKey").value;
+  render();
+  if (haveUrl && $("inKey").value) load();
+  else { $("setup").hidden = false; setStatus("ℹ️ Nhập URL Apps Script + mật khẩu giáo viên rồi bấm “Tải kết quả” (hoặc bấm “Xem dữ liệu mẫu” để xem thử)."); }
+})();
+</script>
+</body>
+</html>
