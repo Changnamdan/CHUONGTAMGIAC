@@ -1,0 +1,2804 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Vương Quốc Tam Giác Bằng Nhau - Toán 7 KNTT</title>
+<style>
+  :root {
+    --primary: #154360;
+    --primary-mid: #1f618d;
+    --primary-light: #2e86c1;
+    --accent: #d35400;
+    --gold: #f1c40f;
+    --gold-dark: #b7950b;
+    --success: #1e8449;
+    --success-bg: #eafaf1;
+    --danger: #c0392b;
+    --danger-bg: #fdedec;
+    --bg: #d9eefc;
+    --card: #ffffff;
+    --text: #1c2833;
+    --muted: #566573;
+    --border: #cbd5e1;
+    --shadow: 0 6px 18px rgba(21, 67, 96, 0.14);
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 20px;
+    line-height: 1.45;
+    background: linear-gradient(135deg, #b8ddf8 0%, #e3f2fd 50%, #fef9e7 100%);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+  }
+
+  #app {
+    width: 100%;
+    max-width: 500px;
+    min-height: 100vh;
+    background: #e6f3fc;
+    box-shadow: 0 0 30px rgba(0,0,0,0.14);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
+    transition: max-width 0.3s ease;
+  }
+
+  #app.teacher-wide {
+    max-width: 1040px;
+    background: #f4f7f9;
+  }
+
+  /* TOP BAR */
+  .top-bar {
+    background: linear-gradient(180deg, #b6defa 0%, #d4ecfc 100%);
+    padding: 10px 12px 6px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 2px solid #9ccdf2;
+  }
+
+  .top-row-1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .player-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .avatar-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid #2c3e50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+
+  .xp-box {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .player-name {
+    font-weight: bold;
+    font-size: 18px;
+    color: #17202a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .xp-bar-outer {
+    width: 100%;
+    height: 11px;
+    background: #fff;
+    border: 2px solid #2c3e50;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 2px 0;
+  }
+
+  .xp-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, #f39c12, #f1c40f);
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  .xp-sub {
+    font-size: 13.5px;
+    font-weight: bold;
+    color: #1f618d;
+  }
+
+  .top-pills {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .gold-pill {
+    background: #fff;
+    border: 2.5px solid #2c3e50;
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-weight: bold;
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 2px 0 #2c3e50;
+  }
+
+  .sound-pill {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2.5px solid #2c3e50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    cursor: pointer;
+    box-shadow: 0 2px 0 #2c3e50;
+  }
+
+  .top-row-2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 6px;
+    gap: 8px;
+  }
+
+  .back-mini-btn {
+    background: #fff;
+    border: 2px solid #2c3e50;
+    border-radius: 12px;
+    padding: 3px 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 2px 0 #2c3e50;
+  }
+
+  .kingdom-label {
+    flex: 1;
+    line-height: 1.15;
+  }
+
+  .kingdom-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #154360;
+  }
+
+  .kingdom-sub {
+    font-size: 14px;
+    color: #2874a6;
+  }
+
+  .score-pill {
+    background: #fff;
+    border: 2px solid #2c3e50;
+    border-radius: 16px;
+    padding: 3px 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #b7950b;
+    box-shadow: 0 2px 0 #2c3e50;
+  }
+
+  /* SCREENS */
+  .screen {
+    display: none;
+    padding: 12px 14px 86px;
+    flex: 1;
+    animation: fadeIn 0.25s ease;
+  }
+
+  .screen.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+    border: 1.5px solid #d4e6f1;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 13px 16px;
+    border: none;
+    border-radius: 14px;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.15s;
+    text-align: center;
+  }
+
+  .btn:active {
+    transform: scale(0.98);
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #1f618d, #2980b9);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(31, 97, 141, 0.35);
+  }
+
+  .btn-gold {
+    background: #f9c724;
+    color: #1c2833;
+    border: 3px solid #2c3e50;
+    box-shadow: 0 4px 0 #2c3e50;
+  }
+
+  .btn-success {
+    background: linear-gradient(135deg, #1e8449, #27ae60);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(30, 132, 73, 0.35);
+  }
+
+  .btn-danger {
+    background: linear-gradient(135deg, #c0392b, #e74c3c);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(192, 57, 43, 0.35);
+  }
+
+  .btn-outline {
+    background: #fff;
+    color: var(--primary);
+    border: 2px solid var(--primary-light);
+  }
+
+  .btn-sm {
+    padding: 8px 12px;
+    font-size: 17px;
+    border-radius: 10px;
+  }
+
+  /* WELCOME / HOME PAGE */
+  .hero-banner {
+    background: linear-gradient(135deg, #154360 0%, #1f618d 60%, #2e86c1 100%);
+    color: #fff;
+    border-radius: 20px;
+    padding: 18px 16px;
+    text-align: center;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+  }
+
+  .hero-title {
+    font-size: 25px;
+    font-weight: bold;
+    color: #f9e79f;
+    margin: 4px 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .teacher-info-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    border: 1.5px solid rgba(255,255,255,0.45);
+    color: #fef9e7;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 17.5px;
+    font-weight: bold;
+    margin-top: 6px;
+  }
+
+  .hero-story {
+    background: rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 17px;
+    text-align: justify;
+    margin-top: 10px;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .continue-card {
+    background: linear-gradient(135deg, #fef9e7, #fcf3cf);
+    border: 2.5px solid #f1c40f;
+    border-radius: 18px;
+    padding: 14px;
+    margin-bottom: 14px;
+    box-shadow: 0 5px 15px rgba(241, 196, 15, 0.25);
+  }
+
+  .form-group {
+    margin-bottom: 14px;
+  }
+
+  .form-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #17202a;
+    font-size: 20px;
+  }
+
+  .form-input, .form-select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2.5px solid #2c3e50;
+    border-radius: 14px;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 20px;
+    background: #fff;
+    color: var(--text);
+  }
+
+  /* CHỌN HÌNH ĐẠI DIỆN / LINH VẬT (GIỐNG ẢNH 6) */
+  .avatar-grid-12 {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .avatar-pick {
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #fff;
+    border: 2.5px solid #2c3e50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    cursor: pointer;
+    transition: transform 0.12s, background 0.12s;
+  }
+
+  .avatar-pick.selected {
+    background: #f9c724;
+    transform: scale(1.08);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  }
+
+  /* CHỌN LỚP THẦN CHIẾN (GIỐNG ẢNH 6) */
+  .warrior-grid-4 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .warrior-card {
+    background: #fdfaf2;
+    border: 3px solid #2c3e50;
+    border-radius: 20px;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.12s, background 0.15s;
+    box-shadow: 0 3px 0 #2c3e50;
+  }
+
+  .warrior-card.selected {
+    background: #f9c724;
+    transform: translateY(-2px);
+  }
+
+  .warrior-icon {
+    font-size: 38px;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .warrior-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #17202a;
+    margin-bottom: 4px;
+  }
+
+  .warrior-desc {
+    font-size: 16px;
+    color: #2c3e50;
+    line-height: 1.3;
+  }
+
+  /* MASCOT DIALOGUE + WINDING PATH MAP (NHƯ ẢNH 8) */
+  .dialogue-bubble {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .guide-owl {
+    font-size: 46px;
+    flex-shrink: 0;
+    filter: drop-shadow(0 3px 4px rgba(0,0,0,0.2));
+  }
+
+  .speech-box {
+    background: #fff;
+    border: 3px solid #2c3e50;
+    border-radius: 18px;
+    padding: 10px 14px;
+    font-size: 17.5px;
+    position: relative;
+    box-shadow: 0 3px 0 #2c3e50;
+    flex: 1;
+  }
+
+  .map-board {
+    background: linear-gradient(180deg, #d7edd7 0%, #e4f3df 50%, #d2ebd3 100%);
+    border: 3px solid #2c3e50;
+    border-radius: 24px;
+    padding: 20px 14px 24px;
+    position: relative;
+    box-shadow: inset 0 0 20px rgba(30, 132, 73, 0.12);
+    margin-bottom: 14px;
+  }
+
+  .map-svg-lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .map-nodes-wrap {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+
+  .map-node-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 66%;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+
+  .map-node-row:active {
+    transform: scale(0.96);
+  }
+
+  .map-node-row.pos-right {
+    align-self: flex-end;
+  }
+
+  .map-node-row.pos-left {
+    align-self: flex-start;
+  }
+
+  .map-node-row.pos-center {
+    align-self: center;
+  }
+
+  .node-circle {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ffffff, #e8f4fc);
+    border: 5px solid #2c3e50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+    box-shadow: 0 6px 0 #2c3e50, 0 10px 16px rgba(0,0,0,0.18);
+    position: relative;
+  }
+
+  .map-node-row.locked .node-circle {
+    background: radial-gradient(circle at 30% 30%, #d5d8dc, #aeb6bf);
+    border-color: #566573;
+    box-shadow: 0 5px 0 #566573;
+  }
+
+  .map-node-row.completed .node-circle {
+    background: radial-gradient(circle at 30% 30%, #fef9e7, #f9e79f);
+    border-color: #1e8449;
+    box-shadow: 0 6px 0 #1e8449;
+  }
+
+  .node-badge-pill {
+    margin-top: -10px;
+    background: #fff;
+    border: 2.5px solid #2c3e50;
+    border-radius: 16px;
+    padding: 4px 12px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 17px;
+    color: #1c2833;
+    box-shadow: 0 3px 0 #2c3e50;
+    z-index: 3;
+    max-width: 210px;
+  }
+
+  .node-sub-tag {
+    font-size: 13.5px;
+    font-weight: bold;
+    color: #1e8449;
+    margin-top: 3px;
+    background: rgba(255,255,255,0.85);
+    padding: 1px 8px;
+    border-radius: 10px;
+  }
+
+  /* LEVEL PICKER MODAL (NHƯ ẢNH 9) */
+  .level-modal-box {
+    background: #fdfaf2;
+    border: 3.5px solid #2c3e50;
+    border-radius: 26px;
+    max-width: 430px;
+    width: 100%;
+    padding: 22px 18px;
+    text-align: center;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+  }
+
+  .level-cards-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .level-pick-card {
+    border: 3px solid #2c3e50;
+    border-radius: 18px;
+    padding: 14px 10px;
+    cursor: pointer;
+    transition: transform 0.12s;
+    box-shadow: 0 4px 0 #2c3e50;
+  }
+
+  .level-pick-card:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #2c3e50;
+  }
+
+  .level-pick-card.easy-card {
+    background: #d4efdf;
+  }
+
+  .level-pick-card.normal-card {
+    background: #fdebd0;
+  }
+
+  .level-pick-title {
+    font-size: 23px;
+    font-weight: bold;
+    color: #1c2833;
+  }
+
+  .level-pick-sub {
+    font-size: 16px;
+    color: #2c3e50;
+    margin: 3px 0;
+  }
+
+  .level-pick-mult {
+    font-size: 16px;
+    font-weight: bold;
+    color: #b7950b;
+    background: rgba(255,255,255,0.75);
+    border-radius: 10px;
+    padding: 2px 6px;
+    margin-top: 4px;
+    display: inline-block;
+  }
+
+  .btn-later {
+    width: 100%;
+    background: #fff;
+    border: 3px solid #2c3e50;
+    border-radius: 16px;
+    padding: 11px;
+    font-family: inherit;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 3px 0 #2c3e50;
+  }
+
+  /* QUIZ SCREEN */
+  .quiz-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    gap: 8px;
+  }
+
+  .hearts-box {
+    font-size: 17px;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .progress-wrap {
+    flex: 1;
+    height: 12px;
+    background: #cbd5e1;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #27ae60, #f1c40f);
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  .warrior-perk-strip {
+    background: #fef9e7;
+    border: 1.5px solid #f5b041;
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-size: 15.5px;
+    color: #7e5109;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+
+  .q-tag-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .q-badge {
+    background: #d6eaf8;
+    color: var(--primary);
+    padding: 3px 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .q-type-badge {
+    background: #fdebd0;
+    color: #a04000;
+    padding: 3px 10px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+  }
+
+  .q-text {
+    font-size: 21px;
+    font-weight: bold;
+    color: #17202a;
+    margin-bottom: 12px;
+  }
+
+  .svg-box {
+    background: #fcfcfc;
+    border: 1px solid #d5dbdb;
+    border-radius: 12px;
+    padding: 8px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .svg-box svg {
+    max-width: 100%;
+    height: auto;
+    max-height: 190px;
+  }
+
+  /* MCQ, TF, INPUT, MATCH, ORDER, CLASSIFY */
+  .opt-list { display: flex; flex-direction: column; gap: 10px; }
+  .opt-btn {
+    display: flex; align-items: flex-start; gap: 10px; width: 100%; text-align: left;
+    padding: 12px 14px; border: 2px solid #cbd5e1; border-radius: 14px; background: #fff;
+    font-family: "Times New Roman", Times, serif; font-size: 20px; cursor: pointer;
+  }
+  .opt-btn.selected { border-color: var(--primary-light); background: #ebf5fb; }
+  .opt-btn.correct { border-color: var(--success); background: var(--success-bg); color: var(--success); font-weight: bold; }
+  .opt-btn.wrong { border-color: var(--danger); background: var(--danger-bg); color: var(--danger); }
+  .opt-btn.eliminated { opacity: 0.32; pointer-events: none; text-decoration: line-through; }
+  .opt-letter {
+    background: #eef2f7; color: var(--primary); font-weight: bold; width: 32px; height: 32px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px;
+  }
+
+  .tf-row { background: #f8f9f9; border: 1px solid #d5dbdb; border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; }
+  .tf-statement { margin-bottom: 8px; font-size: 19px; }
+  .tf-btns { display: flex; gap: 10px; }
+  .tf-choice { flex: 1; padding: 8px; border-radius: 10px; border: 2px solid #bdc3c7; background: #fff; font-family: inherit; font-size: 18px; font-weight: bold; cursor: pointer; }
+  .tf-choice.active-true { background: #d4efdf; border-color: var(--success); color: var(--success); }
+  .tf-choice.active-false { background: #fadbd8; border-color: var(--danger); color: var(--danger); }
+
+  .short-input-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .short-input { flex: 1; padding: 12px; font-size: 24px; font-weight: bold; text-align: center; border: 2px solid var(--primary-light); border-radius: 12px; font-family: inherit; background: #fff; }
+  .numpad { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px; }
+  .num-key { padding: 12px 6px; font-size: 21px; font-weight: bold; border: 1px solid #bdc3c7; border-radius: 10px; background: #f4f6f7; cursor: pointer; font-family: inherit; }
+
+  .match-row { background: #f8f9f9; border: 1px solid #d5dbdb; border-radius: 12px; padding: 10px; margin-bottom: 10px; }
+  .match-left { font-weight: bold; margin-bottom: 6px; color: var(--primary); font-size: 19px; }
+  .match-select { width: 100%; padding: 9px 10px; border-radius: 10px; border: 2px solid #aed6f1; font-family: inherit; font-size: 19px; background: #fff; }
+
+  .order-item { display: flex; align-items: center; gap: 8px; background: #fff; border: 2px solid #aed6f1; border-radius: 12px; padding: 10px; margin-bottom: 8px; }
+  .order-num { width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #fff; font-weight: bold; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; }
+  .order-text { flex: 1; font-size: 18.5px; }
+  .order-arrows { display: flex; flex-direction: column; gap: 4px; }
+  .arr-btn { border: 1px solid #bdc3c7; background: #eef2f7; border-radius: 6px; padding: 2px 8px; font-size: 15px; cursor: pointer; }
+
+  .classify-card { background: #f8f9f9; border: 1px solid #d5dbdb; border-radius: 12px; padding: 10px; margin-bottom: 10px; }
+  .classify-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+  .cls-btn { padding: 8px 6px; border: 2px solid #bdc3c7; border-radius: 10px; background: #fff; font-family: inherit; font-size: 17px; font-weight: bold; cursor: pointer; }
+  .cls-btn.selected { background: #d6eaf8; border-color: var(--primary-light); color: var(--primary); }
+
+  .items-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 10px; }
+  .power-btn { background: #fff; border: 1px solid #d5dbdb; border-radius: 10px; padding: 6px 4px; text-align: center; cursor: pointer; font-family: inherit; font-size: 14px; }
+  .power-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .power-icon { font-size: 20px; display: block; }
+
+  .feedback-box { border-radius: 16px; padding: 14px; margin-top: 14px; display: none; }
+  .feedback-box.correct { background: var(--success-bg); border: 2px solid var(--success); }
+  .feedback-box.wrong { background: var(--danger-bg); border: 2px solid var(--danger); }
+  .fb-title { font-size: 21px; font-weight: bold; margin-bottom: 6px; }
+  .fb-explain { font-size: 19px; margin-bottom: 8px; }
+  .fb-trap { background: rgba(255,255,255,0.75); border-left: 4px solid #e67e22; padding: 8px 10px; border-radius: 8px; font-size: 17.5px; color: #7e5109; }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 500px;
+    background: #fdf6e7;
+    border-top: 2px solid #d5dbdb;
+    display: flex;
+    justify-content: space-around;
+    padding: 6px 0;
+    z-index: 60;
+  }
+
+  .nav-item {
+    border: none;
+    background: none;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 4px 6px;
+    position: relative;
+  }
+
+  .nav-item.active {
+    color: var(--primary);
+    font-weight: bold;
+  }
+
+  .nav-icon {
+    font-size: 22px;
+  }
+
+  .nav-badge-dot {
+    position: absolute;
+    top: 2px;
+    right: 6px;
+    background: #c0392b;
+    color: #fff;
+    border-radius: 10px;
+    padding: 0 5px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  /* SHOP & VAULT (KHO ÔN TẬP LẤY TIM) */
+  .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .shop-card { background: #fff; border: 1px solid #d5dbdb; border-radius: 14px; padding: 12px; text-align: center; }
+  .badge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .badge-card { background: #fff; border: 2px solid #f7dc6f; border-radius: 14px; padding: 12px; text-align: center; }
+  .badge-card.locked { border-color: #d5dbdb; filter: grayscale(1); opacity: 0.6; }
+
+  .vault-banner {
+    background: linear-gradient(135deg, #922b21, #c0392b);
+    color: #fff;
+    border-radius: 16px;
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+
+  /* TEACHER DASHBOARD */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .kpi-card {
+    background: #eaf6f3;
+    border-top: 4px solid #138d75;
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+
+  .kpi-val {
+    font-size: 32px;
+    font-weight: bold;
+    color: #0e6251;
+    line-height: 1.1;
+  }
+
+  .kpi-lbl {
+    font-size: 16px;
+    color: #424949;
+    margin-top: 4px;
+  }
+
+  .class-prog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .class-prog-card {
+    background: #fff;
+    border: 1px solid #d5dbdb;
+    border-radius: 12px;
+    padding: 10px 12px;
+  }
+
+  .teacher-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 17px;
+    background: #fff;
+  }
+
+  .teacher-table th, .teacher-table td {
+    border: 1px solid #d5dbdb;
+    padding: 8px 10px;
+    text-align: left;
+  }
+
+  .teacher-table th {
+    background: #138d75;
+    color: #fff;
+  }
+
+  .student-chip {
+    display: inline-block;
+    background: #fdebd0;
+    color: #9c640c;
+    border: 1px solid #f5b041;
+    border-radius: 8px;
+    padding: 2px 8px;
+    font-size: 15px;
+    font-weight: bold;
+    margin: 2px 3px 2px 0;
+  }
+
+  .bar-bg {
+    width: 100%;
+    height: 16px;
+    background: #eaecee;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: #c0392b;
+    transition: width 0.4s;
+  }
+
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.58);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 16px;
+  }
+
+  .modal-backdrop.active {
+    display: flex;
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- TOP HEADER -->
+  <div class="top-bar" id="topBar" style="display:none;">
+    <div class="top-row-1">
+      <div class="player-left">
+        <div class="avatar-circle" id="hdrAvatar">🦊</div>
+        <div class="xp-box">
+          <div class="player-name" id="hdrName">Học sinh</div>
+          <div class="xp-bar-outer"><div class="xp-bar-inner" id="hdrXpFill"></div></div>
+          <div class="xp-sub" id="hdrXpText">Cấp 1 • 0 XP • 7A</div>
+        </div>
+      </div>
+      <div class="top-pills">
+        <div class="gold-pill" title="Tiền vàng">🪙 <span id="hdrGold">100</span></div>
+        <button class="sound-pill" id="btnSound" onclick="toggleSound()" title="Âm thanh">🔊</button>
+      </div>
+    </div>
+    <div class="top-row-2">
+      <button class="back-mini-btn" onclick="goHomeScreen()">⬅ Trang chủ</button>
+      <div class="kingdom-label">
+        <div class="kingdom-title">🏰 Vương Quốc Tam Giác</div>
+        <div class="kingdom-sub" id="hdrHeartsSummary">❤️ 5/5 tim • Toán 7 KNTT</div>
+      </div>
+      <div class="score-pill" title="Tổng điểm hệ 10">⭐ <span id="hdrScore10">0.0</span>/10 đ</div>
+    </div>
+  </div>
+
+  <!-- SCREEN 0: TRANG CHỦ -->
+  <div id="screen-setup" class="screen active" style="padding-bottom:24px;">
+    <div class="hero-banner">
+      <div style="font-size:38px;">🏰💎📐</div>
+      <div class="hero-title">VƯƠNG QUỐC TAM GIÁC BẰNG NHAU</div>
+      <div style="font-size:16px; color:#d6eaf8;">Toán 7 • Kết nối tri thức với cuộc sống</div>
+      <div class="teacher-info-badge">👩‍🏫 Giáo viên: Trần Thị Thu Chẳng • THCS Nam Đàn</div>
+      <div class="hero-story">
+        <strong>📜 Truyền thuyết Bảo Ngọc:</strong> Hãy chọn hình đại diện linh vật và lớp Thần Chiến phù hợp, sau đó chinh phục 4 ải thử thách (40 câu hỏi mỗi mức) để thu thập 8,0 điểm kiến thức và quy đổi tối đa 2,0 điểm thưởng từ XP &amp; Vàng!
+      </div>
+    </div>
+
+    <!-- NÚT CHƠI TIẾP NẾU HỌC SINH CHƯA HOÀN THÀNH 4 ẢI -->
+    <div class="continue-card" id="continuePlayCard" style="display:none;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <div style="font-size:38px;" id="contAvatar">🦊</div>
+        <div>
+          <strong style="font-size:20px; color:#7d6608;">Chào mừng <span id="contName"></span> quay trở lại!</strong>
+          <div style="font-size:16px; color:#566573;" id="contProgressText">Đã hoàn thành 0/4 ải • Điểm hiện tại: 0.0/10</div>
+        </div>
+      </div>
+      <button class="btn btn-gold" onclick="resumeGame()">▶️ CHƠI TIẾP HÀNH TRÌNH</button>
+    </div>
+
+    <div class="card">
+      <div style="font-weight:bold; color:var(--primary); font-size:21px; margin-bottom:10px;">📝 Thông tin Nhà Hình Học:</div>
+      <div class="form-group">
+        <label class="form-label">🧑‍🎓 Họ và tên học sinh:</label>
+        <input type="text" id="inpName" class="form-input" placeholder="Ví dụ: Nguyễn Văn An">
+      </div>
+      <div class="form-group">
+        <label class="form-label">🏫 Chọn lớp học (THCS Nam Đàn):</label>
+        <select id="inpClass" class="form-select">
+          <option value="7A"> 7A</option>
+          <option value="7B"> 7B</option>
+          <option value="7C"> 7C</option>
+          <option value="7D"> 7D</option>
+          <option value="7E"> 7E</option>
+        </select>
+      </div>
+
+      <!-- BƯỚC 1: CHỌN HÌNH ĐẠI DIỆN / LINH VẬT (GIỐNG ẢNH 6) -->
+      <div class="form-group">
+        <label class="form-label">Chọn hình đại diện (Linh vật):</label>
+        <div class="avatar-grid-12" id="avatarGrid12">
+          <div class="avatar-pick selected" data-emoji="🦊" onclick="selectAvatar(this)">🦊</div>
+          <div class="avatar-pick" data-emoji="🐯" onclick="selectAvatar(this)">🐯</div>
+          <div class="avatar-pick" data-emoji="🐼" onclick="selectAvatar(this)">🐼</div>
+          <div class="avatar-pick" data-emoji="🐸" onclick="selectAvatar(this)">🐸</div>
+          <div class="avatar-pick" data-emoji="🦁" onclick="selectAvatar(this)">🦁</div>
+          <div class="avatar-pick" data-emoji="🐨" onclick="selectAvatar(this)">🐨</div>
+          <div class="avatar-pick" data-emoji="🐧" onclick="selectAvatar(this)">🐧</div>
+          <div class="avatar-pick" data-emoji="🦄" onclick="selectAvatar(this)">🦄</div>
+          <div class="avatar-pick" data-emoji="🐲" onclick="selectAvatar(this)">🐲</div>
+          <div class="avatar-pick" data-emoji="🐱" onclick="selectAvatar(this)">🐱</div>
+          <div class="avatar-pick" data-emoji="🐶" onclick="selectAvatar(this)">🐶</div>
+          <div class="avatar-pick" data-emoji="🐵" onclick="selectAvatar(this)">🐵</div>
+        </div>
+      </div>
+
+      <!-- BƯỚC 2: CHỌN CÁC LOẠI THẦN CHIẾN (GIỐNG ẢNH 6) -->
+      <div class="form-group">
+        <label class="form-label">Chọn lớp thần chiến:</label>
+        <div class="warrior-grid-4" id="warriorGrid4">
+          <div class="warrior-card selected" data-class="chien_binh" onclick="selectWarriorClass(this)">
+            <span class="warrior-icon">⚔️</span>
+            <div class="warrior-title">Chiến binh</div>
+            <div class="warrior-desc">Giáp dày: có <strong>7 tim</strong> thay vì 5.</div>
+          </div>
+          <div class="warrior-card" data-class="phap_su" onclick="selectWarriorClass(this)">
+            <span class="warrior-icon">🔮</span>
+            <div class="warrior-title">Pháp sư</div>
+            <div class="warrior-desc">Thần chú: <strong>2 lần gợi ý</strong> miễn phí mỗi thử thách.</div>
+          </div>
+          <div class="warrior-card" data-class="tham_hiem" onclick="selectWarriorClass(this)">
+            <span class="warrior-icon">🧭</span>
+            <div class="warrior-title">Thám hiểm</div>
+            <div class="warrior-desc">Ống nhòm: mỗi thử thách được <strong>loại bỏ 1 đáp án sai</strong>.</div>
+          </div>
+          <div class="warrior-card" data-class="tho_ren" onclick="selectWarriorClass(this)">
+            <span class="warrior-icon">🔨</span>
+            <div class="warrior-title">Thợ rèn</div>
+            <div class="warrior-desc">Khiên rèn: <strong>lần sai đầu tiên</strong> mỗi thử thách không mất tim.</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-gold" onclick="startNewGame()">Lên đường! ⚔️</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 1: BẢN ĐỒ 4 ẢI (NHƯ ẢNH 8) -->
+  <div id="screen-map" class="screen">
+    <div class="dialogue-bubble">
+      <div class="guide-owl">🦉</div>
+      <div class="speech-box" id="owlSpeech">
+        <strong>Cụ Cú Mèo:</strong> Chạm vào từng ải để chọn mức <strong>Dễ</strong> hoặc <strong>Thường</strong>. Nếu hết tim, em hãy vào <strong>Kho câu sai</strong> để luyện tập lấy lại tim rồi chơi tiếp nhé!
+      </div>
+    </div>
+
+    <!-- Cảnh báo nhanh khi hết tim -->
+    <div id="mapNoHeartAlert" style="display:none; background:#fdedec; border:2.5px solid #c0392b; border-radius:16px; padding:12px; margin-bottom:12px; text-align:center;">
+      <strong style="color:#c0392b; font-size:19px;">💔 Em đã hết tim năng lượng!</strong>
+      <div style="font-size:16.5px; color:#566573; margin:4px 0 8px;">Hãy vào Kho câu sai để làm lại các câu từng sai, mỗi câu đúng hồi lại +1 ❤️!</div>
+      <button class="btn btn-danger btn-sm" onclick="switchTab('badges')">📦 VÀO KHO LUYỆN TẬP LẤY TIM NGAY</button>
+    </div>
+
+    <div class="map-board">
+      <svg class="map-svg-lines" viewBox="0 0 360 520" preserveAspectRatio="none">
+        <path d="M 120 450 Q 200 390 250 330 T 120 200 T 230 75" fill="none" stroke="#ffffff" stroke-width="9" stroke-dasharray="12,12" stroke-linecap="round"/>
+      </svg>
+      <div class="map-nodes-wrap" id="windingNodesWrap"></div>
+    </div>
+
+    <button class="btn btn-success" id="btnViewFinalResult" style="display:none; margin-bottom:10px;" onclick="showFinalResultScreen()">🏆 XEM BẢNG TỔNG KẾT 4 ẢI &amp; ĐIỂM SỐ</button>
+  </div>
+
+  <!-- SCREEN 2: QUIZ (CẢ ẢI CHÍNH VÀ CHẾ ĐỘ LUYỆN TẬP TRONG KHO LẤY TIM) -->
+  <div id="screen-quiz" class="screen">
+    <div class="quiz-top">
+      <button class="btn btn-outline btn-sm" style="width:auto; padding:6px 10px;" onclick="exitQuiz()">⬅ Thoát</button>
+      <div class="progress-wrap"><div class="progress-fill" id="quizProgress"></div></div>
+      <div class="hearts-box" id="quizHearts">❤️❤️❤️❤️❤️</div>
+    </div>
+
+    <!-- Thanh kỹ năng Thần Chiến -->
+    <div class="warrior-perk-strip" id="warriorPerkBanner">⚔️ Chiến binh: Giáp dày tối đa 7 tim!</div>
+
+    <div class="items-bar" id="quizItemsBar">
+      <button class="power-btn" id="btnHint" onclick="usePowerUp('hint')">
+        <span class="power-icon">📜</span>Gợi ý (<span id="cntHint">2</span>)
+      </button>
+      <button class="power-btn" id="btn5050" onclick="usePowerUp('5050')">
+        <span class="power-icon">✂️</span>50:50 (<span id="cnt5050">2</span>)
+      </button>
+      <button class="power-btn" id="btnSkip" onclick="usePowerUp('skip')">
+        <span class="power-icon">👟</span>Bỏ qua (<span id="cntSkip">1</span>)
+      </button>
+      <button class="power-btn" id="btnHeal" onclick="usePowerUp('heal')">
+        <span class="power-icon">🧪</span>Hồi tim (<span id="cntHeal">1</span>)
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="q-tag-row">
+        <span class="q-badge" id="qCounter">Câu 1/10</span>
+        <span class="q-type-badge" id="qTypeBadge">Trắc nghiệm</span>
+      </div>
+      <div style="font-size:15px; color:var(--muted); margin-bottom:6px;" id="qTopic"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="svg-box" id="qSvgBox" style="display:none;"></div>
+
+      <div id="hintBanner" style="display:none; background:#fef9e7; border-left:4px solid #f1c40f; padding:8px 12px; border-radius:8px; margin-bottom:12px; font-size:18px; color:#7d6608;"></div>
+
+      <div id="qInteractiveArea"></div>
+
+      <div style="margin-top:14px;">
+        <button class="btn btn-primary" id="btnSubmitAnswer" onclick="checkCurrentAnswer()">✔️ KIỂM TRA ĐÁP ÁN</button>
+        <button class="btn btn-gold" id="btnNextQuestion" style="display:none;" onclick="nextQuestion()">TIẾP TỤC ➡️</button>
+      </div>
+
+      <div class="feedback-box" id="feedbackBox">
+        <div class="fb-title" id="fbTitle"></div>
+        <div class="fb-explain" id="fbExplain"></div>
+        <div class="fb-trap" id="fbTrap"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: STAGE SUMMARY -->
+  <div id="screen-summary" class="screen">
+    <div class="card" style="text-align:center;">
+      <div style="font-size:54px;" id="sumEmoji">🏆</div>
+      <h2 style="margin:6px 0; color:var(--primary);" id="sumTitle">Hoàn Thành Ải!</h2>
+      <p id="sumSub" style="font-size:19px; color:var(--muted);"></p>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:16px 0;">
+        <div style="background:#ebf5fb; padding:12px; border-radius:12px;">
+          <div style="font-size:16px; color:var(--muted);">Điểm trả lời câu hỏi</div>
+          <div style="font-size:25px; font-weight:bold; color:var(--primary);" id="sumScore">8/10 (+1.6đ)</div>
+        </div>
+        <div style="background:#fef9e7; padding:12px; border-radius:12px;">
+          <div style="font-size:16px; color:var(--muted);">Thưởng XP &amp; Vàng</div>
+          <div style="font-size:22px; font-weight:bold; color:#b7950b;" id="sumReward">+1000 XP • +150 🪙</div>
+        </div>
+      </div>
+      <div id="sumStatusMsg" style="padding:10px; border-radius:10px; margin-bottom:14px; font-weight:bold;"></div>
+      <div id="syncStatus" style="font-size:16px; margin-bottom:10px; color:var(--success); font-weight:bold;">☁️ Kết quả đã tự động gửi về trang giáo viên!</div>
+      <button class="btn btn-primary" onclick="afterStageSummary()">🗺️ TIẾP TỤC HÀNH TRÌNH</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 3B: TỔNG KẾT HOÀN THÀNH 4 ẢI -->
+  <div id="screen-final" class="screen">
+    <div class="card" style="text-align:center; border:3px solid #f1c40f; background:linear-gradient(180deg,#ffffff 0%,#fef9e7 100%);">
+      <div style="font-size:56px;">👑🏆💎</div>
+      <h2 style="margin:6px 0; color:var(--primary);">CHÚC MỪNG HOÀN THÀNH 4 ẢI!</h2>
+      <div style="font-size:18px; color:var(--muted);" id="finalStudentInfo">Học sinh • 7A</div>
+
+      <div style="background:#154360; color:#fff; border-radius:16px; padding:16px; margin:14px 0;">
+        <div style="font-size:17px; color:#d6eaf8;">TỔNG ĐIỂM ĐÁNH GIÁ CHƯƠNG IV</div>
+        <div style="font-size:44px; font-weight:bold; color:#f9e79f;" id="finalTotalScore">9.4 / 10 điểm</div>
+        <div style="font-size:15px; color:#aed6f1;" id="finalRankLabel">Danh hiệu: Đại Sứ Hình Học Xuất Sắc</div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; text-align:left;">
+        <div style="background:#ebf5fb; padding:12px; border-radius:12px; border:1px solid #aed6f1;">
+          <div style="font-size:15px; color:var(--muted);">1. Điểm trả lời câu hỏi (tối đa 8,0đ)</div>
+          <div style="font-size:24px; font-weight:bold; color:var(--primary);" id="finalQuizPoints">7.6 / 8.0 đ</div>
+          <div style="font-size:15px; color:#2874a6;" id="finalCorrectCount">(Đúng 38/40 câu × 0,2đ)</div>
+        </div>
+        <div style="background:#eafaf1; padding:12px; border-radius:12px; border:1px solid #a9dfbf;">
+          <div style="font-size:15px; color:var(--muted);">2. Điểm quy đổi XP &amp; Vàng (tối đa 2,0đ)</div>
+          <div style="font-size:24px; font-weight:bold; color:var(--success);" id="finalBonusPoints">1.8 / 2.0 đ</div>
+          <div style="font-size:15px; color:#1e8449;" id="finalXpGoldDetail">(5200 XP • 750 🪙)</div>
+        </div>
+      </div>
+
+      <div style="background:#fff; border:1px dashed #b7950b; border-radius:12px; padding:10px; font-size:16px; text-align:left; margin-bottom:14px;">
+        <strong>📌 Công thức tính điểm khuyến khích:</strong><br>
+        • Điểm câu hỏi: Mỗi câu đúng cộng <strong>0,2 điểm</strong> (40 câu = 8,0 điểm).<br>
+        • Điểm quy đổi XP &amp; Vàng (tối đa <strong>2,0 điểm</strong>): Chơi mức <strong>Thường</strong> được thưởng gấp <strong>1,6 lần</strong> XP &amp; Vàng so với mức Dễ (đạt ≥ 6.000 XP &amp; 800 Vàng được trọn 2,0 điểm thưởng).
+      </div>
+
+      <div id="finalAutoSyncNote" style="font-size:16px; color:var(--success); font-weight:bold; margin-bottom:12px;">
+        ✅ Kết quả tổng kết đã tự động gửi về trang thống kê của Cô Trần Thị Thu Chẳng!
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <button class="btn btn-outline" onclick="switchTab('map')">🗺️ Xem lại 4 ải</button>
+        <button class="btn btn-danger" onclick="exitToHome()">🚪 Thoát ra Trang chủ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 4: SHOP -->
+  <div id="screen-shop" class="screen">
+    <div class="card">
+      <h3 style="margin:0 0 6px; color:var(--primary);">🛒 Cửa Hàng Bảo Bối Hình Học</h3>
+      <p style="margin:0; font-size:17px; color:var(--muted);">Dùng tiền vàng (🪙) kiếm được để mua vật phẩm trợ giúp khi làm bài!</p>
+    </div>
+    <div class="shop-grid">
+      <div class="shop-card">
+        <div style="font-size:38px;">📜</div>
+        <strong>Cuộn Gợi Ý</strong>
+        <p style="font-size:16px; color:var(--muted); margin:6px 0;">Mở khóa gợi ý định lý &amp; hướng giải.</p>
+        <button class="btn btn-gold btn-sm" onclick="buyItem('hint', 40)">Mua (40 🪙)</button>
+      </div>
+      <div class="shop-card">
+        <div style="font-size:38px;">✂️</div>
+        <strong>Kéo 50:50</strong>
+        <p style="font-size:16px; color:var(--muted); margin:6px 0;">Loại bỏ 2 đáp án sai trong trắc nghiệm.</p>
+        <button class="btn btn-gold btn-sm" onclick="buyItem('5050', 50)">Mua (50 🪙)</button>
+      </div>
+      <div class="shop-card">
+        <div style="font-size:38px;">👟</div>
+        <strong>Giày Bỏ Qua</strong>
+        <p style="font-size:16px; color:var(--muted); margin:6px 0;">Vượt qua 1 câu hỏi khó không mất tim.</p>
+        <button class="btn btn-gold btn-sm" onclick="buyItem('skip', 70)">Mua (70 🪙)</button>
+      </div>
+      <div class="shop-card">
+        <div style="font-size:38px;">🧪</div>
+        <strong>Bình Hồi Máu</strong>
+        <p style="font-size:16px; color:var(--muted); margin:6px 0;">Hồi phục +2 trái tim ngay lập tức.</p>
+        <button class="btn btn-gold btn-sm" onclick="buyItem('heal', 60)">Mua (60 🪙)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 5: KHO LUYỆN TẬP LẤY TIM & BẢO NGỌC -->
+  <div id="screen-badges" class="screen">
+    <div class="vault-banner">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="margin:0; font-size:21px;">📦 Kho Câu Hỏi Sai &amp; Hồi Phục Tim</h3>
+        <span style="background:rgba(255,255,255,0.2); padding:3px 10px; border-radius:12px; font-weight:bold;" id="vaultHeartStat">❤️ 5/5 tim</span>
+      </div>
+      <p style="margin:6px 0 10px; font-size:16.5px;">
+        Tất cả các câu hỏi trả lời sai ở các ải đều được lưu vào kho này. Khi hết tim, em hãy vào kho luyện tập lại: <strong>mỗi câu làm đúng lấy lại +1 ❤️</strong> để tiếp tục hoàn thành các ải!
+      </p>
+      <button class="btn btn-gold" id="btnStartVaultPractice" onclick="startVaultPractice()">⚔️ LUYỆN TẬP CÂU TRONG KHO ĐỂ LẤY TIM</button>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 8px; color:var(--danger);">📕 Danh Sách Câu Hỏi Đang Lưu Trong Kho (<span id="vaultCountLabel">0</span> câu)</h3>
+      <div id="wrongNotesList" style="font-size:18px;"></div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 6px; color:var(--primary);">💎 Kho Bảo Ngọc Đã Khôi Phục</h3>
+      <div class="badge-grid" id="badgesGrid"></div>
+    </div>
+  </div>
+
+  <!-- SCREEN 6: PROFILE -->
+  <div id="screen-profile" class="screen">
+    <div class="card" style="text-align:center;">
+      <div style="font-size:56px;" id="profAvatar">🦊</div>
+      <h2 style="margin:4px 0; color:var(--primary);" id="profName">Học sinh</h2>
+      <div style="font-size:18px; color:var(--muted);" id="profInfo"> 7A • Trường THCS Nam Đàn</div>
+      <div style="display:inline-block; background:#fef9e7; border:1.5px solid #f39c12; color:#7e5109; border-radius:14px; padding:4px 12px; font-size:16px; font-weight:bold; margin-top:6px;" id="profWarriorBadge">⚔️ Thần chiến: Chiến binh</div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:14px 0;">
+        <div style="background:#ebf5fb; padding:10px; border-radius:12px;">
+          <div style="font-size:15px;">Tổng điểm</div>
+          <strong style="font-size:22px; color:var(--primary);" id="profTotal10">0.0/10</strong>
+        </div>
+        <div style="background:#fef9e7; padding:10px; border-radius:12px;">
+          <div style="font-size:15px;">Điểm XP</div>
+          <strong style="font-size:22px; color:#b7950b;" id="profXP">0</strong>
+        </div>
+        <div style="background:#eafaf1; padding:10px; border-radius:12px;">
+          <div style="font-size:15px;">Tiền vàng</div>
+          <strong style="font-size:22px; color:var(--success);" id="profGold">100</strong>
+        </div>
+      </div>
+
+      <button class="btn btn-gold" style="margin-bottom:10px;" onclick="showFinalResultScreen()">🏆 Xem Bảng Tổng Kết Điểm Chi Tiết</button>
+      <button class="btn btn-outline btn-sm" onclick="goHomeScreen()">⬅ Quay về Trang chủ</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 7: TRANG GIÁO VIÊN (TRUY CẬP QUA LINK ?gv=1 HOẶC #giaovien) -->
+  <div id="screen-teacher" class="screen">
+    <div class="card" style="background:linear-gradient(135deg,#0e6251,#138d75); color:#fff;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div>
+          <h2 style="margin:0; font-size:23px;">👩‍🏫 TRANG THỐNG KÊ GIÁO VIÊN</h2>
+          <div style="font-size:16px; color:#d1f2eb;">GV: Trần Thị Thu Chẳng • Trường THCS Nam Đàn • Toán 7 KNTT</div>
+        </div>
+        <button class="btn btn-gold btn-sm" style="width:auto;" onclick="exitTeacherLinkMode()">🏠 Về trang học sinh</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; margin-bottom:12px;">
+        <div style="display:flex; gap:8px; align-items:center;">
+          <label><strong>Lọc theo lớp:</strong></label>
+          <select id="teacherClassFilter" class="form-select" style="width:auto; padding:6px 12px;" onchange="renderTeacherAnalytics()">
+            <option value="ALL">Tất cả các lớp (7A - 7E)</option>
+            <option value="7A"> 7A</option>
+            <option value="7B"> 7B</option>
+            <option value="7C"> 7C</option>
+            <option value="7D"> 7D</option>
+            <option value="7E"> 7E</option>
+          </select>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" style="width:auto;" onclick="fetchTeacherResults()">🔄 Tải kết quả</button>
+          <button class="btn btn-success btn-sm" style="width:auto;" onclick="exportTeacherCSV()">📥 Xuất Excel (CSV)</button>
+        </div>
+      </div>
+
+      <div style="background:#f8f9f9; border:1px solid #d5dbdb; border-radius:12px; padding:10px; margin-bottom:14px;">
+        <div style="font-size:15px; color:var(--muted); margin-bottom:4px;">
+          🔗 <strong>Đường dẫn truy cập trực tiếp Trang Giáo Viên:</strong> <code id="teacherDirectUrl" style="color:#154360;">?gv=1</code>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <input type="text" id="gasUrlInput" class="form-input" style="font-size:16px; padding:7px 10px; flex:2; min-width:260px;" placeholder="https://script.google.com/macros/s/AKfycbx7jrLn0mBEu1rMyGGrtHMo3oOFtcrxWt4AzQYxTBi94L3HoHFgn0mNXD4PBDkBM4Hcpg/exec " onchange="saveGasUrl()">
+          <input type="password" id="teacherKeyInput" class="form-input" style="font-size:16px; padding:7px 10px; flex:1; min-width:180px;" placeholder="Mật khẩu giáo viên">
+        </div>
+        <div id="teacherFetchStatus" style="font-size:15px; color:var(--primary); margin-top:4px;"></div>
+      </div>
+
+      <!-- KPI CARDS -->
+      <div class="kpi-grid" id="teacherKpiGrid"></div>
+
+      <!-- TIẾN ĐỘ TỪNG LỚP -->
+      <div class="class-prog-grid" id="teacherClassProg"></div>
+
+      <!-- 1. BẢNG XẾP HẠNG -->
+      <h3 style="color:#0e6251; margin:16px 0 8px;">1. 🏆 Bảng Xếp Hạng &amp; Điểm Quy Đổi Học Sinh</h3>
+      <div style="overflow-x:auto;">
+        <table class="teacher-table" id="tblLeaderboard">
+          <thead>
+            <tr>
+              <th>Hạng</th>
+              <th>Họ và tên</th>
+              <th>Lớp</th>
+              <th>Thần chiến / Mức</th>
+              <th>Điểm câu hỏi (8đ)</th>
+              <th>Điểm XP/Vàng (2đ)</th>
+              <th>Tổng điểm (10đ)</th>
+              <th>Dạng yếu nhất</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- 2. DẠNG CẢ LỚP SAI NHIỀU NHẤT KÈM TÊN HS CẦN HỖ TRỢ -->
+      <h3 style="color:#0e6251; margin:20px 0 8px;">2. 🎯 Dạng Bài Cần Hỗ Trợ &amp; Danh Sách Học Sinh Sai Nhiều</h3>
+      <div style="overflow-x:auto;">
+        <table class="teacher-table" id="tblSupportNeeded">
+          <thead>
+            <tr>
+              <th style="width:38%;">DẠNG BÀI TRỌNG TÂM</th>
+              <th>HỌC SINH CẦN HỖ TRỢ THÊM</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- 3. BIỂU ĐỒ TỈ LỆ % CÂU LÀM SAI THEO DẠNG BÀI -->
+      <h3 style="color:var(--danger); margin:20px 0 8px;">3. 📊 Tỉ Lệ Làm Sai Theo Dạng Bài (%)</h3>
+      <div id="topicErrorBars"></div>
+    </div>
+  </div>
+
+  <!-- LEVEL SELECTION MODAL (NHƯ ẢNH 9) -->
+  <div class="modal-backdrop" id="levelModal">
+    <div class="level-modal-box">
+      <div style="font-size:36px;" id="lvlModalIcon">🏰</div>
+      <h2 style="margin:4px 0; font-size:25px; color:#1c2833;" id="lvlModalTitle">Ải 1. Thung Lũng Góc</h2>
+      <p style="font-size:17px; color:#566573; margin:6px 0 12px;" id="lvlModalDesc">
+        10 thử thách đa dạng (đảo thứ tự ngẫu nhiên). Mỗi câu đúng +0,2 điểm. Sai một câu mất một tim.
+      </p>
+      <div style="font-weight:bold; font-size:19px; color:#1c2833;">Chọn mức độ</div>
+
+      <div class="level-cards-2">
+        <div class="level-pick-card easy-card" onclick="confirmStartLevel('de')">
+          <div class="level-pick-title">Dễ</div>
+          <div class="level-pick-sub">Làm quen</div>
+          <div class="level-pick-mult">×1 thưởng XP/Vàng</div>
+          <div style="font-size:14px; margin-top:4px; color:#1e8449; font-weight:bold;" id="lvlEasyBest">Kỷ lục: 0/10</div>
+        </div>
+        <div class="level-pick-card normal-card" onclick="confirmStartLevel('thuong')">
+          <div class="level-pick-title">Thường</div>
+          <div class="level-pick-sub">Vừa sức • Nâng cao</div>
+          <div class="level-pick-mult">×1.6 thưởng XP/Vàng</div>
+          <div style="font-size:14px; margin-top:4px; color:#a04000; font-weight:bold;" id="lvlNormalBest">Kỷ lục: 0/10</div>
+        </div>
+      </div>
+
+      <button class="btn-later" onclick="closeLevelModal()">Để sau</button>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAVIGATION -->
+  <nav class="bottom-nav" id="bottomNav" style="display:none;">
+    <button class="nav-item active" data-tab="map" onclick="switchTab('map')">
+      <span class="nav-icon">🗺️</span><span>Bản đồ</span>
+    </button>
+    <button class="nav-item" data-tab="shop" onclick="switchTab('shop')">
+      <span class="nav-icon">🛒</span><span>Cửa hàng</span>
+    </button>
+    <button class="nav-item" data-tab="badges" onclick="switchTab('badges')">
+      <span class="nav-icon">📦</span><span>Kho lấy tim</span>
+      <span class="nav-badge-dot" id="navVaultCount" style="display:none;">0</span>
+    </button>
+    <button class="nav-item" data-tab="profile" onclick="switchTab('profile')">
+      <span class="nav-icon">🧑‍🎓</span><span>Hồ sơ</span>
+    </button>
+  </nav>
+</div>
+
+<script>
+const QUESTIONS = [{"id": 1, "stage": 1, "level": "de", "type": "mcq", "topic": "Dạng 1: Tổng ba góc trong tam giác", "q": "Tổng số đo ba góc trong một tam giác bằng:", "options": ["90°", "180°", "360°", "270°"], "ans": 1, "explain": "Theo định lý tổng ba góc trong một tam giác, tổng số đo ba góc trong mọi tam giác luôn bằng 180°.", "trap": "Học sinh hay nhầm với tổng 4 góc trong một tứ giác (360°) hoặc tổng hai góc nhọn trong tam giác vuông (90°)."}, {"id": 2, "stage": 1, "level": "de", "type": "tf", "topic": "Dạng 1: Phân loại tam giác", "q": "Đánh giá tính Đúng (Đ) hoặc Sai (S) cho các mệnh đề sau về phân loại tam giác:", "items": [{"text": "a) Tam giác vuông là tam giác có đúng một góc vuông.", "ans": true}, {"text": "b) Tam giác tù là tam giác có ba góc tù.", "ans": false}, {"text": "c) Tam giác nhọn là tam giác có cả ba góc nhọn.", "ans": true}, {"text": "d) Trong tam giác vuông, tổng số đo hai góc nhọn bằng 90°.", "ans": true}], "explain": "a) ĐÚNG theo định nghĩa. b) SAI vì tam giác tù chỉ có tối đa 1 góc tù (tổng hai góc tù đã vượt 180°). c) ĐÚNG theo định nghĩa tam giác nhọn. d) ĐÚNG vì hai góc nhọn trong tam giác vuông phụ nhau.", "trap": "Học sinh ngộ nhận tam giác tù có thể có nhiều hơn 1 góc tù mà không kiểm tra định lý tổng ba góc."}, {"id": 3, "stage": 1, "level": "de", "type": "input", "topic": "Dạng 1: Tính góc thứ ba trong tam giác", "q": "Cho tam giác ABC có ∠A = 70°, ∠B = 50°. Tính số đo góc C (độ).", "ans": "60", "unit": "°", "explain": "Trong ΔABC, ∠C = 180° − (∠A + ∠B) = 180° − (70° + 50°) = 180° − 120° = 60°.", "trap": "Học sinh cộng nhẩm sai 70° + 50° = 130° dẫn đến kết quả 50°, hoặc quên không lấy 180° trừ đi tổng hai góc."}, {"id": 4, "stage": 1, "level": "de", "type": "match", "topic": "Dạng 1: Tổng ba góc & Tam giác vuông", "q": "Nối mỗi tam giác ở Cột A với số đo góc thứ ba tương ứng ở Cột B:", "left": ["1) ΔABC có ∠A = 50°, ∠B = 60°", "2) ΔMNP vuông tại N có ∠P = 40°", "3) ΔDEF có ∠D = 80°, ∠E = 50°", "4) ΔHIK có ∠H = 100°, ∠I = 30°"], "right": ["A) ∠M = 50°", "B) ∠C = 70°", "C) ∠F = 50°", "D) ∠K = 50°"], "ans": [1, 0, 2, 3], "explain": "1) ∠C = 180° − (50°+60°) = 70° (1-B). 2) ∠M = 90° − 40° = 50° (2-A). 3) ∠F = 180° − (80°+50°) = 50° (3-C). 4) ∠K = 180° − (100°+30°) = 50° (4-D).", "trap": "Học sinh hay tính sai phép trừ nhẩm hoặc ghép lộn xộn giữa tên các đỉnh tam giác khác nhau."}, {"id": 5, "stage": 1, "level": "de", "type": "order", "topic": "Dạng 1: Trình bày bài giải tam giác vuông", "q": "Sắp xếp các bước theo đúng thứ tự để tính số đo góc C của tam giác ABC vuông tại A có ∠B = 40°:", "steps": ["Bước A: Tính ∠C = 90° − 40° = 50°.", "Bước B: Áp dụng tính chất hai góc nhọn trong ΔABC vuông tại A: ∠B + ∠C = 90°.", "Bước C: Thay số: 40° + ∠C = 90°.", "Bước D: Kết luận số đo ∠C = 50°."], "ans": [1, 2, 0, 3], "explain": "Trình tự logic bài toán hình học: Nêu căn cứ định lý tam giác vuông (B) → Thay số liệu (C) → Phép tính giải (A) → Kết luận (D).", "trap": "Học sinh hay đảo bước thay số (C) lên trước bước nêu định lý (B)."}, {"id": 6, "stage": 1, "level": "de", "type": "mcq", "topic": "Dạng 1: Tính góc thứ ba trong tam giác", "q": "Tam giác ABC có ∠A = 70°, ∠B = 50°. Số đo góc C là:", "options": ["50°", "70°", "80°", "60°"], "ans": 3, "explain": "∠C = 180° − 70° − 50° = 60°.", "trap": "Học sinh cộng nhầm 70° + 50° = 110° rồi lấy 180° − 110° = 70° chọn nhầm B."}, {"id": 7, "stage": 1, "level": "de", "type": "mcq", "topic": "Dạng 1: Hai góc nhọn trong tam giác vuông", "q": "Tam giác ABC vuông tại A có ∠B = 40°. Số đo góc C là:", "options": ["50°", "40°", "140°", "60°"], "ans": 0, "explain": "Trong ΔABC vuông tại A, hai góc nhọn phụ nhau nên ∠C = 90° − 40° = 50°.", "trap": "Học sinh lấy 180° − 40° = 140° chọn C do quên không trừ đi số đo góc vuông A = 90°."}, {"id": 8, "stage": 1, "level": "de", "type": "mcq", "topic": "Dạng 1: Tính chất góc ngoài tam giác", "q": "Khẳng định nào sau đây ĐÚNG về góc ngoài của tam giác?", "options": ["Góc ngoài kề với một góc trong của tam giác.", "Góc ngoài bằng tổng hai góc trong không kề với nó.", "Góc ngoài luôn nhỏ hơn mỗi góc trong không kề với nó.", "Góc ngoài có số đo bằng 180°."], "ans": 1, "explain": "Theo tính chất góc ngoài của tam giác, số đo góc ngoài bằng tổng số đo hai góc trong không kề với nó.", "trap": "Học sinh nhầm khái niệm 'kề bù' thành 'kề' (A sai), hoặc chọn nhầm C (góc ngoài luôn lớn hơn góc trong không kề)."}, {"id": 9, "stage": 1, "level": "de", "type": "tf", "topic": "Dạng 1: Nhận định về số đo góc tam giác", "q": "Đánh giá tính Đúng (Đ) hoặc Sai (S) của các nhận định sau về số đo các góc:", "items": [{"text": "a) Bộ ba số đo 80°, 50°, 50° có thể là số đo ba góc của một tam giác.", "ans": true}, {"text": "b) Bộ ba số đo 90°, 60°, 50° có thể là số đo ba góc của một tam giác.", "ans": false}, {"text": "c) Góc ngoài của tam giác lớn hơn mỗi góc trong không kề với nó.", "ans": true}, {"text": "d) Tam giác ABC có ∠A = 80° và ∠B gấp 4 lần ∠C thì ∠C = 20°.", "ans": true}], "explain": "a) ĐÚNG vì 80°+50°+50° = 180°. b) SAI vì 90°+60°+50° = 200° ≠ 180°. c) ĐÚNG theo tính chất góc ngoài. d) ĐÚNG vì B + C = 100° và B = 4C ⇒ 5C = 100° ⇒ C = 20°.", "trap": "Học sinh cộng nhẩm sai tổng ba góc ở câu b hoặc biến đổi sai phương trình 5C = 100° ở câu d."}, {"id": 10, "stage": 1, "level": "de", "type": "input", "topic": "Dạng 1: Tính góc theo tỉ lệ", "q": "Tam giác ABC có ∠A = 80° và ∠B gấp 4 lần ∠C. Số đo góc C là bao nhiêu độ?", "ans": "20", "unit": "°", "explain": "Tổng hai góc ∠B + ∠C = 180° − 80° = 100°. Vì ∠B = 4∠C nên 4∠C + ∠C = 100° ⇒ 5∠C = 100° ⇒ ∠C = 20°.", "trap": "Học sinh lấy 100° chia cho 4 được 25° do quên tính cả phần của góc C (phải chia cho 4 + 1 = 5)."}, {"id": 11, "stage": 1, "level": "thuong", "type": "mcq", "topic": "Dạng 1: Suy luận góc trong tam giác", "q": "Một tam giác có thể có nhiều nhất bao nhiêu góc tù?", "options": ["Một góc", "Hai góc", "Ba góc", "Không có góc nào"], "ans": 0, "explain": "Nếu tam giác có hai góc tù (mỗi góc > 90°) thì tổng hai góc đã vượt quá 180°, mâu thuẫn với định lý tổng ba góc.", "trap": "Học sinh nhầm lẫn với tam giác nhọn (có 3 góc nhọn) nên chọn sai sang B hoặc C."}, {"id": 12, "stage": 1, "level": "thuong", "type": "mcq", "svg": "q12", "topic": "Dạng 1: Tính góc ngoài tam giác", "q": "Tam giác ABC có ∠A = 50°, ∠C = 60°. Số đo góc ngoài tại đỉnh B là:", "options": ["70°", "130°", "110°", "10°"], "ans": 2, "explain": "Góc ngoài tại đỉnh B bằng tổng hai góc trong không kề: ∠A + ∠C = 50° + 60° = 110°.", "trap": "Học sinh tính góc trong B = 70° rồi chọn nhầm A (70°) thay vì lấy góc ngoài kề bù với nó."}, {"id": 13, "stage": 1, "level": "thuong", "type": "mcq", "topic": "Dạng 1: Góc ngoài & Tam giác vuông", "q": "Tam giác ABC vuông tại A, góc ngoài tại đỉnh B bằng 130°. Số đo góc C là:", "options": ["50°", "40°", "130°", "90°"], "ans": 1, "explain": "Góc ngoài tại B bằng ∠A + ∠C ⇒ 130° = 90° + ∠C ⇒ ∠C = 40°.", "trap": "Học sinh tính góc trong B = 180° − 130° = 50° rồi chọn nhầm A (50°) thay vì tìm góc C.", "svg": "q13"}, {"id": 14, "stage": 1, "level": "thuong", "type": "input", "topic": "Dạng 1: Tổng hiệu hai góc nhọn", "q": "Tam giác ABC vuông tại C, có ∠A − ∠B = 20°. Số đo góc A là bao nhiêu độ?", "ans": "55", "unit": "°", "explain": "Vì tam giác vuông tại C nên ∠A + ∠B = 90°. Có ∠A − ∠B = 20° ⇒ ∠A = (90° + 20°) / 2 = 55°.", "trap": "Học sinh nhầm ∠A + ∠B = 180° dẫn đến tính ra góc A = 100° (tam giác vuông không thể chứa góc tù 100°)."}, {"id": 15, "stage": 1, "level": "thuong", "type": "match", "topic": "Dạng 1: Ứng dụng thực tế góc tam giác", "q": "Ghép tình huống thực tế ở Cột A với số đo góc tương ứng ở Cột B:", "left": ["1) Khung mái nhà tam giác cân có góc ở đỉnh bằng 100°", "2) Thang dựa tường thẳng đứng tạo với mặt đất góc 65°", "3) Kéo dài BC về C lấy D, góc ngoài ∠ACD = 125°, ∠A = 45°", "4) Mảnh đất tam giác có 3 góc lần lượt là x, x+10°, x+20°"], "right": ["A) Góc giữa thang và tường = 25°", "B) Mỗi góc ở chân mái = 40°", "C) Góc B = 80°", "D) Góc lớn nhất = 70°"], "ans": [1, 0, 2, 3], "explain": "1-B: (180°−100°)/2 = 40°. 2-A: 90°−65° = 25°. 3-C: ∠B = 125°−45° = 80°. 4-D: 3x+30°=180° ⇒ x=50° ⇒ góc lớn nhất 70°.", "trap": "Học sinh tính nhầm góc nghiêng của chiếc thang với mặt tường thành góc bẹt."}, {"id": 16, "stage": 1, "level": "thuong", "type": "order", "topic": "Dạng 1: Giải phương trình góc tam giác", "q": "Sắp xếp các bước tìm số đo góc lớn nhất của mảnh đất tam giác có 3 góc x, x+10°, x+20°:", "steps": ["Bước A: Suy ra 3x + 30° = 180° ⇒ 3x = 150° ⇒ x = 50°.", "Bước B: Tính ba góc là 50°, 60°, 70° và kết luận góc lớn nhất là 70°.", "Bước C: Áp dụng định lý tổng ba góc trong tam giác: x + (x + 10°) + (x + 20°) = 180°."], "ans": [2, 0, 1], "explain": "Phát biểu định lý tổng 3 góc (C) → Thiết lập phương trình giải ra x (A) → Tính các góc và kết luận (B).", "trap": "Học sinh đưa bước kết luận (B) lên trước bước giải phương trình (A)."}, {"id": 17, "stage": 1, "level": "thuong", "type": "mcq", "topic": "Dạng 1: Bài toán thực tế mái nhà", "q": "Khung mái nhà hình tam giác có góc ở đỉnh là 100°, hai góc ở chân mái bằng nhau. Mỗi góc ở chân mái có số đo là:", "options": ["40°", "80°", "50°", "100°"], "ans": 0, "explain": "Tổng hai góc ở chân mái là 180° − 100° = 80°. Vì hai góc bằng nhau nên mỗi góc là 80° / 2 = 40°.", "trap": "Học sinh quên không chia cho 2 nên chọn nhầm B (80°)."}, {"id": 18, "stage": 1, "level": "thuong", "type": "input", "svg": "q18", "topic": "Dạng 1: Bài toán thực tế chiếc thang", "q": "Một chiếc thang dựa vào tường thẳng đứng tạo với mặt đất góc 65°. Số đo góc giữa thang và tường là bao nhiêu độ?", "ans": "25", "unit": "°", "explain": "Tam giác tạo bởi thang, tường và mặt đất là tam giác vuông tại chân tường. Góc cần tìm = 90° − 65° = 25°.", "trap": "Học sinh lấy 180° − 65° = 115° do không nhận ra tam giác tạo thành là tam giác vuông."}, {"id": 19, "stage": 1, "level": "thuong", "type": "tf", "topic": "Dạng 1: Nhận định nâng cao về góc tam giác", "q": "Xét tính Đúng (Đ) hoặc Sai (S) của các phát biểu sau:", "items": [{"text": "a) Trong tam giác nhọn, cả ba góc đều nhỏ hơn 90°.", "ans": true}, {"text": "b) Góc ngoài của tam giác luôn bằng tổng hai góc trong không kề với nó.", "ans": true}, {"text": "c) Tam giác tù có thể có hai góc vuông.", "ans": false}, {"text": "d) Số đo góc ngoài của tam giác có thể nhỏ hơn số đo góc trong kề với nó.", "ans": true}], "explain": "a) ĐÚNG theo định nghĩa. b) ĐÚNG theo tính chất. c) SAI vì tổng góc vượt 180°. d) ĐÚNG (ví dụ góc trong tù 120° thì góc ngoài kề bù bằng 60° < 120°).", "trap": "Học sinh tưởng góc ngoài lúc nào cũng lớn hơn góc trong kề nên đánh d là Sai."}, {"id": 20, "stage": 1, "level": "thuong", "type": "input", "topic": "Dạng 1: Góc ngoài tam giác", "q": "Tam giác ABC có ∠A = 80°, góc ngoài tại đỉnh B bằng 120°. Tính số đo góc C (độ).", "ans": "40", "unit": "°", "explain": "Góc ngoài tại B bằng ∠A + ∠C ⇒ 120° = 80° + ∠C ⇒ ∠C = 40°.", "trap": "Học sinh tính góc B = 60° rồi cộng nhầm 80° + 60° = 140°."}, {"id": 21, "stage": 2, "level": "de", "type": "mcq", "topic": "Dạng 2: Định nghĩa hai tam giác bằng nhau", "q": "Hai tam giác bằng nhau là hai tam giác có:", "options": ["diện tích bằng nhau", "các cạnh tương ứng bằng nhau và các góc tương ứng bằng nhau", "ba góc bằng nhau", "chu vi bằng nhau"], "ans": 1, "explain": "Theo định nghĩa hai tam giác bằng nhau trong SGK Toán 7: Hai tam giác bằng nhau là hai tam giác có các cạnh tương ứng bằng nhau và các góc tương ứng bằng nhau.", "trap": "Học sinh nhầm hai tam giác có cùng diện tích hoặc cùng chu vi thì bằng nhau."}, {"id": 22, "stage": 2, "level": "de", "type": "mcq", "topic": "Dạng 2: Ký hiệu đỉnh/cạnh tương ứng", "q": "Cho ΔABC = ΔDEF. Cạnh BC bằng cạnh nào sau đây?", "options": ["AB", "DE", "EF", "DF"], "ans": 2, "explain": "Vì đỉnh B tương ứng E, C tương ứng F nên cạnh BC tương ứng bằng cạnh EF.", "trap": "Học sinh lấy sai thứ tự đỉnh tương ứng dẫn đến chọn nhầm DE hoặc DF."}, {"id": 23, "stage": 2, "level": "de", "type": "mcq", "topic": "Dạng 2: Trường hợp bằng nhau c.c.c", "q": "Theo trường hợp cạnh – cạnh – cạnh (c.c.c), hai tam giác bằng nhau khi:", "options": ["hai cạnh và một góc bằng nhau", "ba góc tương ứng bằng nhau", "hai góc và một cạnh bằng nhau", "ba cạnh tương ứng bằng nhau"], "ans": 3, "explain": "Theo định lý trường hợp bằng nhau c.c.c (ba cạnh của tam giác này bằng ba cạnh của tam giác kia).", "trap": "Học sinh nhầm lẫn tên các trường hợp bằng nhau c.c.c, c.g.c, g.c.g."}, {"id": 24, "stage": 2, "level": "de", "type": "tf", "topic": "Dạng 2: Đọc ký hiệu tam giác bằng nhau", "q": "Cho tam giác ABC và ký hiệu bằng nhau ΔABC = ΔMNP. Đánh giá tính Đúng/Sai:", "items": [{"text": "a) Góc A là góc xen giữa hai cạnh AB và AC.", "ans": true}, {"text": "b) Cạnh BC là cạnh kề của hai góc B và C.", "ans": true}, {"text": "c) Đỉnh A tương ứng với đỉnh N.", "ans": false}, {"text": "d) Cạnh AC tương ứng bằng cạnh MP.", "ans": true}], "explain": "a, b) ĐÚNG theo khái niệm góc xen giữa và cạnh kề. c) SAI vì vị trí thứ nhất đỉnh A tương ứng đỉnh M. d) ĐÚNG vì AC = MP.", "trap": "Học sinh không chú ý thứ tự chữ cái trong ký hiệu hai tam giác bằng nhau."}, {"id": 25, "stage": 2, "level": "de", "type": "input", "topic": "Dạng 2: Tính góc từ hai tam giác bằng nhau", "q": "Cho ΔABC = ΔMNP, biết ∠A = 70°, ∠N = 50°. Tính số đo góc P (độ).", "ans": "60", "unit": "°", "explain": "ΔABC = ΔMNP ⇒ ∠B = ∠N = 50°, ∠M = ∠A = 70°. Trong ΔMNP, ∠P = 180° − 70° − 50° = 60°.", "trap": "Học sinh nhầm ∠P = ∠N = 50° hoặc ∠P = ∠A = 70° do không tính góc thứ ba."}, {"id": 26, "stage": 2, "level": "de", "type": "mcq", "topic": "Dạng 2: Nhận diện trường hợp c.c.c", "q": "Hai tam giác ABC và DEF trong hình có AB = DE, BC = EF, CA = FD. Hai tam giác bằng nhau theo trường hợp:", "options": ["c.c.c", "c.g.c", "g.c.g", "cạnh huyền – cạnh góc vuông"], "ans": 0, "explain": "Vì ba cạnh của ΔABC lần lượt bằng ba cạnh của ΔDEF nên ΔABC = ΔDEF (c.c.c).", "trap": "Học sinh chọn c.g.c dù trên hình chưa cho góc nào bằng nhau."}, {"id": 27, "stage": 2, "level": "de", "type": "match", "topic": "Dạng 2: Yếu tố tương ứng c.g.c", "q": "Cho hai tam giác ABC và DEF có AB = DE, ∠B = ∠E, BC = EF. Nối Cột A với Cột B:", "left": ["1) Trường hợp bằng nhau của ΔABC và ΔDEF", "2) Đỉnh tương ứng với đỉnh B", "3) Cạnh tương ứng với cạnh AC", "4) Góc tương ứng với góc A"], "right": ["A) c.g.c", "B) Đỉnh E", "C) Cạnh DF", "D) Góc D"], "ans": [0, 1, 2, 3], "explain": "Có 2 cạnh và góc xen giữa bằng nhau ⇒ ΔABC = ΔDEF (c.g.c). Đỉnh tương ứng A↔D, B↔E, C↔F. Do đó: 1-A, 2-B, 3-C, 4-D.", "trap": "Học sinh ghép sai thứ tự các đỉnh tương ứng."}, {"id": 28, "stage": 2, "level": "de", "type": "order", "topic": "Dạng 2: Trình bày chứng minh g.c.g", "q": "Sắp xếp các bước chứng minh ΔABC = ΔDEF theo trường hợp góc - cạnh - góc (g.c.g) khi biết ∠B = ∠E, BC = EF, ∠C = ∠F:", "steps": ["Bước A: Kết luận ΔABC = ΔDEF (g.c.g).", "Bước B: Xét ΔABC và ΔDEF có: ∠B = ∠E, BC = EF, ∠C = ∠F.", "Bước C: Suy ra các cặp cạnh tương ứng bằng nhau AB = DE, AC = DF."], "ans": [1, 0, 2], "explain": "Xét tam giác và nêu giả thiết (B) → Kết luận bằng nhau g.c.g (A) → Suy ra hệ quả cạnh tương ứng (C).", "trap": "Học sinh đưa bước kết luận (A) lên đầu trước bước xét tam giác (B)."}, {"id": 29, "stage": 2, "level": "de", "type": "input", "topic": "Dạng 2: Tính chu vi từ hai tam giác bằng nhau", "q": "Cho ΔABC = ΔDEF, biết AB = 5 cm, BC = 7 cm, CA = 9 cm. Tính chu vi tam giác DEF (cm).", "ans": "21", "unit": "cm", "explain": "Vì ΔABC = ΔDEF nên DE = AB = 5 cm, EF = BC = 7 cm, DF = CA = 9 cm. Chu vi ΔDEF = 5 + 7 + 9 = 21 cm.", "trap": "Học sinh cộng thiếu một cạnh hoặc lấy các số nhân với nhau."}, {"id": 30, "stage": 2, "level": "de", "type": "mcq", "topic": "Dạng 2: Bẫy góc xen giữa trong c.g.c", "q": "Cho hai tam giác ABC và DEF có AB = DE, BC = EF, ∠A = ∠D. Khẳng định nào ĐÚNG?", "options": ["ΔABC = ΔDEF theo c.c.c", "ΔABC = ΔDEF theo c.g.c", "ΔABC = ΔDEF theo g.c.g", "Chưa đủ điều kiện kết luận theo c.g.c, vì ∠A không xen giữa hai cạnh AB và BC."], "ans": 3, "explain": "Góc xen giữa hai cạnh AB và BC phải là góc B. Vì cho góc A nên chưa đủ điều kiện c.g.c.", "trap": "Học sinh thấy có 2 cạnh và 1 góc bằng nhau nên vội chọn B mà quên mất điều kiện góc phải xen giữa."}, {"id": 31, "stage": 2, "level": "thuong", "type": "mcq", "svg": "q31", "topic": "Dạng 2: Cạnh chung trong c.c.c", "q": "Trong hình bên, AB = AD, CB = CD. Hai tam giác ABC và ADC bằng nhau theo trường hợp nào?", "options": ["c.g.c", "g.c.g", "c.c.c", "Không bằng nhau"], "ans": 2, "explain": "AB = AD, CB = CD và AC là cạnh chung nên ΔABC = ΔADC (c.c.c).", "trap": "Học sinh không nhìn ra AC là cạnh chung của hai tam giác."}, {"id": 32, "stage": 2, "level": "thuong", "type": "mcq", "svg": "q32", "topic": "Dạng 2: Cạnh chung & Góc vuông trong c.g.c", "q": "Trong hình bên, M là trung điểm của BC và AM ⊥ BC. Hai tam giác AMB và AMC bằng nhau theo trường hợp nào?", "options": ["c.g.c", "c.c.c", "g.c.g", "cạnh huyền – cạnh góc vuông"], "ans": 0, "explain": "MB = MC, ∠AMB = ∠AMC = 90° và AM là cạnh chung nên ΔAMB = ΔAMC (c.g.c).", "trap": "Học sinh chọn c.c.c khi đề bài chưa cho AB = AC."}, {"id": 33, "stage": 2, "level": "thuong", "type": "mcq", "topic": "Dạng 2: Góc đối đỉnh trong g.c.g", "q": "Trong hình bên, hai đoạn thẳng AB và CD cắt nhau tại O, OA = OB và ∠OAC = ∠OBD. Hai tam giác OAC và OBD bằng nhau theo trường hợp nào?", "options": ["c.c.c", "g.c.g", "c.g.c", "Không đủ điều kiện"], "ans": 1, "explain": "∠OAC = ∠OBD, OA = OB và ∠AOC = ∠BOD (hai góc đối đỉnh) nên ΔOAC = ΔOBD (g.c.g).", "trap": "Học sinh bỏ qua yếu tố hai góc đối đỉnh ∠AOC = ∠BOD."}, {"id": 34, "stage": 2, "level": "thuong", "type": "tf", "topic": "Dạng 2: Đẳng thức cạnh/góc tương ứng", "q": "Cho ΔABC = ΔHIK. Đánh giá tính Đúng (Đ) hoặc Sai (S) của các đẳng thức sau:", "items": [{"text": "a) AB = HI", "ans": true}, {"text": "b) Góc B = Góc I", "ans": true}, {"text": "c) AC = HK", "ans": true}, {"text": "d) Góc C = Góc H", "ans": false}], "explain": "a, b, c ĐÚNG vì A↔H, B↔I, C↔K. d) SAI vì đỉnh C tương ứng K nên ∠C = ∠K, không phải ∠H.", "trap": "Học sinh nhầm góc C tương ứng với H."}, {"id": 35, "stage": 2, "level": "thuong", "type": "input", "svg": "q35", "topic": "Dạng 2: Ứng dụng đo khoảng cách qua ao", "q": "Để đo khoảng cách giữa hai điểm A, B ở hai bên ao, người ta chọn O, lấy C, D sao cho O là trung điểm AC và BD. Đo được CD = 30 m. Khoảng cách AB là bao nhiêu mét?", "ans": "30", "unit": "m", "explain": "OA = OC, OB = OD, ∠AOB = ∠COD (đối đỉnh) ⇒ ΔOAB = ΔOCD (c.g.c) ⇒ AB = CD = 30 m.", "trap": "Học sinh chia đôi lấy 15 m do nghĩ O nằm giữa A và B."}, {"id": 36, "stage": 2, "level": "thuong", "type": "match", "svg": "q36", "topic": "Dạng 2: Tia phân giác & Tam giác bằng nhau", "q": "Cho Oz là tia phân giác ∠xOy, OA = OB, M thuộc Oz. Biết MA = 6 cm, ∠OAM = 40°. Ghép Cột A với Cột B:", "left": ["1) Độ dài MB", "2) Số đo góc OBM", "3) Trường hợp bằng nhau của ΔOAM và ΔOBM", "4) Cạnh chung của hai tam giác"], "right": ["A) c.g.c", "B) 40°", "C) 6 cm", "D) Cạnh OM"], "ans": [2, 1, 0, 3], "explain": "OA = OB, ∠AOM = ∠BOM, OM chung ⇒ ΔOAM = ΔOBM (c.g.c) ⇒ MB = MA = 6 cm, ∠OBM = ∠OAM = 40°.", "trap": "Học sinh nhầm góc OBM là góc tù."}, {"id": 37, "stage": 2, "level": "thuong", "type": "order", "topic": "Dạng 2: Chứng minh hai đoạn thẳng bằng nhau", "q": "Sắp xếp các bước chứng minh ΔAMB = ΔDMC khi M là trung điểm BC và MD = MA:", "steps": ["Bước A: Kết luận ΔAMB = ΔDMC (c.g.c).", "Bước B: Suy ra CD = AB và ∠MCD = ∠MBA.", "Bước C: Xét ΔAMB và ΔDMC có: MA = MD, ∠AMB = ∠DMC (đối đỉnh), MB = MC."], "ans": [2, 0, 1], "explain": "Nêu các yếu tố bằng nhau (C) → Kết luận hai tam giác bằng nhau (A) → Rút ra hệ quả cạnh và góc tương ứng (B).", "trap": "Học sinh đưa bước suy ra hệ quả (B) lên trước bước kết luận tam giác bằng nhau (A)."}, {"id": 38, "stage": 2, "level": "thuong", "type": "input", "topic": "Dạng 2: Tính tổng độ dài cạnh", "q": "Trong hình, AB là cạnh chung, ∠CAB = ∠DAB, ∠CBA = ∠DBA. Biết AC = 6 cm, BD = 8 cm. Tính tổng AD + BC (cm).", "ans": "14", "unit": "cm", "explain": "ΔABC = ΔABD (g.c.g) ⇒ AD = AC = 6 cm, BC = BD = 8 cm. Tổng AD + BC = 6 + 8 = 14 cm.", "trap": "Học sinh lấy 8 − 6 = 2 cm."}, {"id": 39, "stage": 2, "level": "thuong", "type": "mcq", "topic": "Dạng 2: Tìm điều kiện bổ sung c.g.c", "q": "Hai tam giác ABC và DEF có ∠B = ∠E, BC = EF. Cần thêm điều kiện nào để ΔABC = ΔDEF theo trường hợp c.g.c?", "options": ["AC = DF", "Góc A = Góc D", "AB = DE", "Góc C = Góc F"], "ans": 2, "explain": "Cần thêm cạnh AB = DE để góc B là góc xen giữa hai cạnh AB và BC.", "trap": "Học sinh chọn D (∠C = ∠F) vì nhầm với trường hợp g.c.g."}, {"id": 40, "stage": 2, "level": "thuong", "type": "tf", "topic": "Dạng 2: Tổng hợp các trường hợp bằng nhau", "q": "Xét tính Đúng (Đ) hoặc Sai (S) của các nhận định sau về tam giác bằng nhau:", "items": [{"text": "a) Hai tam giác có 3 cặp cạnh tương ứng bằng nhau thì bằng nhau (c.c.c).", "ans": true}, {"text": "b) Hai tam giác có 2 cặp cạnh và góc xen giữa bằng nhau thì bằng nhau (c.g.c).", "ans": true}, {"text": "c) Hai tam giác có 1 cặp cạnh và 2 góc kề bằng nhau thì bằng nhau (g.c.g).", "ans": true}, {"text": "d) Hai tam giác có 3 cặp góc tương ứng bằng nhau thì luôn bằng nhau.", "ans": false}], "explain": "a, b, c ĐÚNG theo 3 trường hợp bằng nhau tổng quát. d) SAI vì ba góc bằng nhau chỉ đồng dạng (kích thước có thể khác nhau), không nhất thiết bằng nhau.", "trap": "Học sinh nhầm trường hợp góc-góc-góc (g.g.g) áp dụng cho tam giác bằng nhau."}, {"id": 41, "stage": 3, "level": "de", "type": "mcq", "topic": "Dạng 3: Hai cạnh góc vuông", "q": "Cho ΔABC vuông tại A và ΔDEF vuông tại D có AB = DE, AC = DF. Hai tam giác này bằng nhau theo trường hợp nào?", "options": ["Cạnh huyền – góc nhọn", "Cạnh huyền – cạnh góc vuông", "Hai cạnh góc vuông (c.g.c)", "Cạnh góc vuông – góc nhọn kề"], "ans": 2, "explain": "Hai tam giác vuông có hai cặp cạnh góc vuông tương ứng bằng nhau (AB = DE, AC = DF) và ∠A = ∠D = 90° nên bằng nhau theo c.g.c.", "trap": "Học sinh nhầm sang trường hợp cạnh huyền - cạnh góc vuông do không phân biệt được cạnh huyền và cạnh góc vuông."}, {"id": 42, "stage": 3, "level": "de", "type": "mcq", "topic": "Dạng 3: Điều kiện cạnh huyền – góc nhọn", "q": "Cho ΔABC và ΔMNP (biết ∠A = ∠M = 90°, ∠C = ∠P). Cần thêm điều kiện nào để ΔABC = ΔMNP theo trường hợp cạnh huyền – góc nhọn?", "options": ["AB = MN", "AC = MP", "BC = NP", "Góc B = Góc N"], "ans": 2, "explain": "Đã có ∠A = ∠M = 90° và góc nhọn ∠C = ∠P. Để theo trường hợp cạnh huyền - góc nhọn, cần thêm cặp cạnh huyền bằng nhau BC = NP.", "trap": "Chọn nhầm B (AC = MP). Nếu AC = MP thì hai tam giác bằng nhau theo g.c.g (cạnh góc vuông - góc nhọn kề), không đúng yêu cầu."}, {"id": 43, "stage": 3, "level": "de", "type": "mcq", "topic": "Dạng 3: Ký hiệu đỉnh tương ứng tam giác vuông", "q": "Cho ΔIHK vuông tại I và ΔQPR vuông tại Q có HK = PR và IH = QP. Khẳng định nào viết đúng thứ tự đỉnh?", "options": ["ΔIHK = ΔQRP", "ΔIHK = ΔQPR", "ΔHIK = ΔQPR", "ΔIKH = ΔQPR"], "ans": 1, "explain": "Góc vuông I tương ứng Q; cạnh IH = QP nên H tương ứng P; đỉnh K tương ứng R. Vậy ΔIHK = ΔQPR.", "trap": "Học sinh viết bừa thứ tự đỉnh không đối chiếu sự tương ứng giữa góc vuông và các cạnh."}, {"id": 44, "stage": 3, "level": "de", "type": "mcq", "topic": "Dạng 3: Cạnh góc vuông và góc nhọn", "q": "Hai tam giác vuông có một cặp cạnh góc vuông bằng nhau và một cặp góc nhọn bằng nhau (chưa nói rõ vị trí của góc nhọn so với cạnh góc vuông). Khẳng định nào ĐÚNG?", "options": ["Chưa đủ điều kiện để kết luận hai tam giác bằng nhau.", "Chỉ bằng nhau khi góc nhọn đó kề với cạnh góc vuông.", "Chỉ bằng nhau khi góc nhọn đó đối diện với cạnh góc vuông.", "Luôn bằng nhau, dù góc nhọn đó kề hay đối diện với cạnh góc vuông."], "ans": 3, "explain": "Nếu góc nhọn kề cạnh góc vuông ⇒ bằng nhau theo g.c.g. Nếu góc nhọn đối diện ⇒ góc nhọn còn lại (kề với cạnh góc vuông đó) cũng bằng nhau vì hai góc nhọn phụ nhau ⇒ cũng bằng nhau theo g.c.g. Vậy cả hai trường hợp hai tam giác đều bằng nhau.", "trap": "Học sinh chỉ nghĩ đến trường hợp góc nhọn kề (B) mà quên rằng góc nhọn đối diện cũng dẫn đến hai tam giác bằng nhau do hai góc nhọn phụ nhau."}, {"id": 45, "stage": 3, "level": "de", "type": "match", "topic": "Dạng 3: Tên gọi các trường hợp tam giác vuông", "q": "Ghép giả thiết ở Cột A với tên trường hợp bằng nhau của tam giác vuông ở Cột B:", "left": ["1. Hai cạnh góc vuông bằng nhau", "2. Cạnh huyền và góc nhọn bằng nhau", "3. Một cạnh góc vuông và góc nhọn kề bằng nhau", "4. Một cạnh góc vuông và cạnh huyền bằng nhau"], "right": ["a. Cạnh huyền – góc nhọn", "b. Cạnh huyền – cạnh góc vuông", "c. Hai cạnh góc vuông (c.g.c)", "d. Cạnh góc vuông – góc nhọn kề (g.c.g)"], "ans": [2, 0, 3, 1], "explain": "1–c (Hai cạnh góc vuông), 2–a (Cạnh huyền – góc nhọn), 3–d (Cạnh góc vuông – góc nhọn kề), 4–b (Cạnh huyền – cạnh góc vuông).", "trap": "Nhầm lẫn giữa trường hợp 3 (cạnh góc vuông - góc nhọn kề) và trường hợp 2 (cạnh huyền - góc nhọn)."}, {"id": 46, "stage": 3, "level": "de", "type": "match", "topic": "Dạng 3: Yếu tố tương ứng trong tam giác vuông", "q": "Cho ΔABC = ΔDEF (vuông tại A và D). Ghép Cột A với Cột B:", "left": ["1. Cạnh huyền BC", "2. Cạnh góc vuông AB", "3. Góc nhọn C", "4. Tổng số đo ∠B + ∠F"], "right": ["a. Góc F", "b. 90°", "c. Cạnh huyền EF", "d. Cạnh góc vuông DE"], "ans": [2, 3, 0, 1], "explain": "1-c (BC = EF). 2-d (AB = DE). 3-a (∠C = ∠F). 4-b (∠B + ∠F = ∠B + ∠C = 90°).", "trap": "Lúng túng ở ý 4 do hai góc B và F ở hai tam giác khác nhau, không nhận ra ∠B + ∠C = 90°."}, {"id": 47, "stage": 3, "level": "de", "type": "input", "topic": "Dạng 3: Độ dài cạnh tương ứng", "q": "Cho ΔABC = ΔMNP (vuông tại A và M), AB = 6 cm, NP = 10 cm. Điền độ dài cạnh MN (cm).", "ans": "6", "unit": "cm", "explain": "Vì ΔABC = ΔMNP nên hai cạnh tương ứng MN = AB = 6 cm.", "trap": "Học sinh vội vàng tính nhầm sang độ dài cạnh AC rồi điền số 8 do không đọc kỹ đề hỏi cạnh MN."}, {"id": 48, "stage": 3, "level": "de", "type": "input", "topic": "Dạng 3: Tính góc từ hai tam giác vuông bằng nhau", "q": "Cho ΔABC có AB = AC và AH ⊥ BC tại H. Biết ∠BAH = 35°. Tính số đo ∠ACH (độ).", "ans": "55", "unit": "°", "explain": "ΔAHB = ΔAHC (cạnh huyền - cạnh góc vuông) ⇒ ∠CAH = ∠BAH = 35°. Trong ΔAHC vuông tại H, ∠ACH = 90° − 35° = 55°.", "trap": "Học sinh ngộ nhận ∠ACH = ∠BAH = 35° do không chú ý hai góc ở vị trí khác nhau."}, {"id": 49, "stage": 3, "level": "de", "type": "order", "topic": "Dạng 3: Trình bày chứng minh tam giác vuông g.c.g", "q": "Cho O là trung điểm AB, ∠A = ∠B = 90°. Sắp xếp các bước chứng minh ΔOAC = ΔOBD:", "steps": ["(1) Suy ra ΔOAC = ΔOBD (g.c.g).", "(2) Xét ΔOAC và ΔOBD có: ∠A = ∠B = 90°.", "(3) Có ∠AOC = ∠BOD (hai góc đối đỉnh).", "(4) Có OA = OB (O là trung điểm AB)."], "ans": [1, 3, 2, 0], "explain": "Nêu hai tam giác vuông (2) → Chỉ ra OA = OB (4) → Chỉ ra hai góc đối đỉnh (3) → Kết luận hai tam giác bằng nhau (1).", "trap": "Học sinh quên nêu ∠A = ∠B = 90° trước khi xét trường hợp g.c.g."}, {"id": 50, "stage": 3, "level": "de", "type": "order", "topic": "Dạng 3: Trình bày cạnh huyền – cạnh góc vuông", "q": "Cho ΔABC có BD ⊥ AC, CE ⊥ AB và BD = CE. Sắp xếp các bước chứng minh ΔBCD = ΔCBE:", "steps": ["(1) Có cạnh BC chung.", "(2) Vậy ΔBCD = ΔCBE (cạnh huyền – cạnh góc vuông).", "(3) Xét ΔBCD vuông tại D và ΔCBE vuông tại E.", "(4) Có BD = CE (giả thiết)."], "ans": [2, 0, 3, 1], "explain": "Xét hai tam giác vuông (3) → Nêu cạnh huyền chung BC (1) → Nêu cạnh góc vuông BD = CE (4) → Kết luận (2).", "trap": "Học sinh xác định nhầm cạnh huyền là BD và CE."}, {"id": 51, "stage": 3, "level": "thuong", "type": "mcq", "topic": "Dạng 3: Tính chất tia phân giác", "q": "Cho góc xOy nhọn, Oz là phân giác. M trên Oz, MA ⊥ Ox, MB ⊥ Oy. Khẳng định nào SAI?", "options": ["ΔOMA = ΔOMB", "MA = MB", "OM là đường trung trực của AB", "OA = MB"], "ans": 3, "explain": "ΔOMA = ΔOMB (cạnh huyền - góc nhọn) ⇒ MA = MB và OA = OB. OM là trung trực AB. Khẳng định D (OA = MB) là sai.", "trap": "Học sinh nhầm lẫn giữa cạnh kề OA với cạnh đối MB."}, {"id": 52, "stage": 3, "level": "thuong", "type": "mcq", "topic": "Dạng 3: Đếm cặp tam giác bằng nhau", "q": "Cho AB ⊥ BC, DC ⊥ BC (A, D cùng phía với BC) và AC = BD. Gọi I là giao điểm của AC và BD. Trong bốn tam giác ABC, DCB, AIB, DIC, số cặp tam giác bằng nhau là:", "options": ["1 cặp", "2 cặp", "3 cặp", "4 cặp"], "ans": 1, "explain": "1) ΔABC = ΔDCB (cạnh huyền − cạnh góc vuông: BC chung, AC = BD) ⇒ AB = DC, ∠BAC = ∠CDB và ∠ACB = ∠DBC. 2) Từ ∠ACB = ∠DBC suy ra ∠ABI = ∠DCI (cùng phụ với hai góc bằng nhau) ⇒ ΔAIB = ΔDIC (g.c.g). Trong bốn tam giác đã nêu có đúng 2 cặp tam giác bằng nhau.", "trap": "Học sinh chỉ nhìn thấy 1 cặp tam giác lớn (ΔABC = ΔDCB) mà bỏ sót cặp tam giác nhỏ (ΔAIB = ΔDIC)."}, {"id": 53, "stage": 3, "level": "thuong", "type": "mcq", "topic": "Dạng 3: Đường cao trong tam giác cân", "q": "Cho ΔABC cân tại A. Kẻ BD ⊥ AC, CE ⊥ AB. H là giao điểm BD và CE. Khẳng định nào ĐÚNG về AH?", "options": ["AH ⊥ BC", "AH là tia phân giác góc A", "AH đi qua trung điểm BC", "Cả A, B, C đều đúng"], "ans": 3, "explain": "ΔABD = ΔACE ⇒ AD = AE ⇒ ΔAEH = ΔADH ⇒ AH là phân giác góc A. Trong tam giác cân, đường phân giác AH đồng thời là đường cao (AH ⊥ BC) và đường trung tuyến (đi qua trung điểm BC).", "trap": "Học sinh chỉ chứng minh được AH là phân giác rồi chọn ngay B mà không đọc hết các phương án."}, {"id": 54, "stage": 3, "level": "thuong", "type": "mcq", "topic": "Dạng 3: Góc vuông tạo bởi hai tam giác bằng nhau", "q": "Cho ∠B = ∠C = 90°, M trên BC sao cho AB = CM và BM = CD. Số đo góc AMD là:", "options": ["60°", "90°", "100°", "120°"], "ans": 1, "explain": "ΔABM = ΔMCD (hai cạnh góc vuông) ⇒ ∠AMB = ∠MDC. Trong ΔMCD vuông tại C, ∠MDC + ∠DMC = 90° ⇒ ∠AMB + ∠DMC = 90° ⇒ ∠AMD = 180° − 90° = 90°.", "trap": "Học sinh đoán mò 90° nhưng không biết cách cộng góc kề bù để giải thích."}, {"id": 55, "stage": 3, "level": "thuong", "type": "match", "topic": "Dạng 3: Giải thích căn cứ chứng minh", "q": "Cho ΔABC vuông tại A (AB < AC), BD = BA (D trên BC), DE ⊥ BC. Ghép Cột A với căn cứ ở Cột B để chứng minh BE là phân giác góc B:", "left": ["1. ∠BAE = ∠BDE = 90°", "2. ΔABE = ΔDBE", "3. ∠ABE = ∠DBE", "4. AE = DE"], "right": ["a. Cạnh tương ứng của hai tam giác bằng nhau", "b. Giả thiết (ΔABC vuông tại A và DE ⊥ BC)", "c. Hai góc tương ứng của hai tam giác bằng nhau", "d. Trường hợp cạnh huyền – cạnh góc vuông"], "ans": [1, 3, 2, 0], "explain": "1-b: Giả thiết vuông góc. 2-d: ΔABE = ΔDBE (cạnh huyền BE chung, BA = BD). 3-c: Hai góc tương ứng. 4-a: Hai cạnh tương ứng.", "trap": "Học sinh ngộ nhận E là trung điểm AC nên cố chứng minh AE = EC (sai)."}, {"id": 56, "stage": 3, "level": "thuong", "type": "match", "topic": "Dạng 3: Phân loại trường hợp bằng nhau", "q": "Cho AB = AC, M là trung điểm BC, ME ⊥ AB, MF ⊥ AC. Ghép Cột A với Cột B:", "left": ["1. ΔABM và ΔACM", "2. ΔAEM và ΔAFM", "3. ΔBEM và ΔCFM"], "right": ["a. Cạnh huyền – góc nhọn", "b. Cạnh – cạnh – cạnh (c.c.c)", "c. Cạnh huyền – cạnh góc vuông"], "ans": [1, 0, 2], "explain": "1-b: ΔABM = ΔACM (c.c.c). 2-a: ΔAEM = ΔAFM (cạnh huyền AM chung, ∠BAM = ∠CAM). 3-c: ΔBEM = ΔCFM (cạnh huyền BM = CM, ME = MF).", "trap": "Chưa chứng minh ΔABM = ΔACM mà vội vã dùng ngay ∠BAM = ∠CAM."}, {"id": 57, "stage": 3, "level": "thuong", "type": "input", "topic": "Dạng 3: Tính độ dài đoạn thẳng qua tia phân giác", "q": "Cho ΔABC vuông tại A, tia phân giác góc B cắt AC tại D. Kẻ DH ⊥ BC tại H. Biết AD = 4 cm. Tính độ dài đoạn thẳng DH (cm).", "ans": "4", "unit": "cm", "explain": "Xét ΔABD và ΔHBD vuông tại A và H: cạnh huyền BD chung, góc nhọn ∠ABD = ∠HBD (do BD là phân giác). Suy ra ΔABD = ΔHBD (cạnh huyền - góc nhọn) ⇒ DH = AD = 4 cm.", "trap": "Học sinh đọc không kỹ đề hoặc lúng túng trong việc tìm tam giác vuông bằng nhau chứa hai đoạn thẳng AD và DH."}, {"id": 58, "stage": 3, "level": "thuong", "type": "input", "topic": "Dạng 3: Tính góc qua hai tam giác vuông", "q": "Cho AB ⊥ BC, DC ⊥ BC, AB = 4 cm, BC = 7 cm, CD = 3 cm. Điểm M trên BC sao cho BM = 3 cm. Tính số đo ∠AMD (độ).", "ans": "90", "unit": "°", "explain": "MC = BC − BM = 7 − 3 = 4 cm. ΔABM = ΔMCD (hai cạnh góc vuông: AB = MC = 4, BM = CD = 3) ⇒ ∠AMB = ∠MDC ⇒ ∠AMB + ∠DMC = 90° ⇒ ∠AMD = 90°.", "trap": "Học sinh không tính độ dài MC trước nên không thấy cặp cạnh bằng nhau AB = MC = 4 cm."}, {"id": 59, "stage": 3, "level": "thuong", "type": "order", "topic": "Dạng 3: Chuỗi chứng minh nâng cao", "q": "Cho ΔABC cân tại A. Kẻ BD ⊥ AC, CE ⊥ AB. Gọi H, K lần lượt là chân đường vuông góc kẻ từ B, C đến ED. Sắp xếp các bước chứng minh ΔHBD = ΔKCE:", "steps": ["(1) Suy ra ΔHBD = ΔKCE (cạnh huyền – góc nhọn).", "(2) Chứng minh ΔABD = ΔACE (cạnh huyền – góc nhọn) ⇒ BD = CE và AD = AE.", "(3) Suy ra ΔADE cân tại A ⇒ ∠ADE = ∠AED.", "(4) Xét ΔHBD vuông tại H và ΔKCE vuông tại K.", "(5) Có BD = CE và ∠HDB = ∠KEC (cùng phụ với hai góc bằng nhau ∠ADE, ∠AED)."], "ans": [1, 2, 3, 4, 0], "explain": "Chứng minh ΔABD = ΔACE (2) → ΔADE cân (3) → Xét 2 tam giác vuông nhỏ (4) → Nêu các yếu tố bằng nhau (5) → Kết luận (1).", "trap": "Học sinh nhảy thẳng vào xét 2 tam giác vuông nhỏ khi chưa chứng minh BD = CE."}, {"id": 60, "stage": 3, "level": "thuong", "type": "order", "topic": "Dạng 3: Chứng minh hai đường thẳng song song", "q": "Cho ΔABC có M là trung điểm BC. BH ⊥ AM tại H, CK ⊥ AM tại K. Sắp xếp các bước chứng minh BH // CK và BH = CK:", "steps": ["(1) Xét ΔBHM vuông tại H và ΔCKM vuông tại K.", "(2) Suy ra BH = CK và ∠HBM = ∠KCM (hai góc tương ứng).", "(3) Có BM = CM và ∠BMH = ∠CMK (đối đỉnh).", "(4) Mà ∠HBM và ∠KCM ở vị trí so le trong nên BH // CK.", "(5) Do đó ΔBHM = ΔCKM (cạnh huyền – góc nhọn)."], "ans": [0, 2, 4, 1, 3], "explain": "Xét 2 tam giác vuông (1) → Nêu yếu tố bằng nhau (3) → Kết luận bằng nhau (5) → Suy ra cạnh và góc tương ứng (2) → Kết luận song song (4).", "trap": "Học sinh suy ra ngay song song trước khi chứng minh hai tam giác bằng nhau."}, {"id": 61, "stage": 4, "level": "de", "type": "mcq", "topic": "Dạng 4: Định nghĩa tam giác cân", "q": "Cho tam giác ABC cân tại đỉnh A. Khẳng định nào sau đây ĐÚNG?", "options": ["AB = BC", "AB = AC", "AC = BC", "Góc A = Góc B"], "ans": 1, "explain": "Theo định nghĩa tam giác cân, tam giác ABC cân tại A có hai cạnh bên AB và AC bằng nhau (AB = AC).", "trap": "Học sinh nhìn nhầm đỉnh cân A dẫn đến chọn AB = BC hoặc gán góc đỉnh bằng góc đáy (∠A = ∠B)."}, {"id": 62, "stage": 4, "level": "de", "type": "tf", "topic": "Dạng 4: Khái niệm & Tính chất đường trung trực", "q": "Đánh giá tính Đúng (Đ) hoặc Sai (S) cho các mệnh đề sau về đường trung trực của đoạn thẳng AB:", "items": [{"text": "a) Đường thẳng đi qua trung điểm của đoạn thẳng AB là đường trung trực của AB.", "ans": false}, {"text": "b) Đường thẳng vuông góc với đoạn thẳng AB tại trung điểm của nó là đường trung trực của AB.", "ans": true}, {"text": "c) Mọi điểm nằm trên đường trung trực của AB đều cách đều hai điểm A và B.", "ans": true}, {"text": "d) Nếu MA = MB thì điểm M luôn là trung điểm của đoạn thẳng AB.", "ans": false}], "explain": "a) SAI vì thiếu điều kiện vuông góc. b) ĐÚNG theo định nghĩa. c) ĐÚNG theo tính chất cách đều. d) SAI vì M có thể nằm trên đường trung trực (ngoài đoạn AB).", "trap": "Học sinh hay quên điều kiện 'vuông góc' ở câu a, hoặc nhầm khái niệm 'cách đều' với 'trung điểm' ở câu d."}, {"id": 63, "stage": 4, "level": "de", "type": "input", "topic": "Dạng 4: Tính góc ở đáy tam giác cân", "q": "Cho tam giác MNP cân tại M, có góc ở đỉnh ∠M = 70°. Tính số đo góc ở đáy N (độ).", "ans": "55", "unit": "°", "explain": "ΔMNP cân tại M ⇒ ∠N = ∠P = (180° − 70°) / 2 = 110° / 2 = 55°.", "trap": "Học sinh quên không chia 2 cho hai góc ở đáy, lấy 180° − 70° = 110° rồi kết luận sai."}, {"id": 64, "stage": 4, "level": "de", "type": "match", "topic": "Dạng 4: Ôn tập tổng hợp yếu tố tương ứng", "q": "Cho ΔABC = ΔDEF. Nối mỗi yếu tố ở Cột A với yếu tố tương ứng bằng nó ở Cột B:", "left": ["1) Cạnh AB", "2) Cạnh BC", "3) Góc A", "4) Góc C"], "right": ["A) Góc F", "B) Cạnh EF", "C) Cạnh DE", "D) Góc D"], "ans": [2, 1, 3, 0], "explain": "Từ ký hiệu ΔABC = ΔDEF suy ra các đỉnh tương ứng: A↔D, B↔E, C↔F. Do đó: AB = DE (1-C), BC = EF (2-B), ∠A = ∠D (3-D), ∠C = ∠F (4-A).", "trap": "Học sinh không đối chiếu đúng thứ tự tên đỉnh trong ký hiệu hai tam giác bằng nhau."}, {"id": 65, "stage": 4, "level": "de", "type": "classify", "topic": "Dạng 4: Phân loại tam giác theo số đo góc", "q": "Phân loại các tam giác có số đo ba góc sau đây vào 2 nhóm thích hợp:", "groups": ["Nhóm 1: Tam giác vuông", "Nhóm 2: Không phải tam giác vuông"], "items": [{"text": "Δ1 (50°, 60°, 70°)", "group": 1}, {"text": "Δ2 (30°, 60°, 90°)", "group": 0}, {"text": "Δ3 (45°, 45°, 90°)", "group": 0}, {"text": "Δ4 (40°, 40°, 100°)", "group": 1}], "explain": "Tam giác vuông có một góc bằng 90°. Δ2 và Δ3 có góc 90° nên là tam giác vuông. Δ1 là tam giác nhọn, Δ4 là tam giác tù (góc 100° > 90°).", "trap": "Học sinh thấy Δ4 có hai góc 40° bằng nhau nên vội vàng xếp nhầm vào nhóm tam giác vuông cân."}, {"id": 66, "stage": 4, "level": "de", "type": "order", "topic": "Dạng 4: Trình bày bài toán tính góc", "q": "Sắp xếp các bước theo đúng thứ tự để tính ∠A của ΔABC biết ∠B = 50°, ∠C = 60°:", "steps": ["Bước A: Thay số: ∠A + 50° + 60° = 180°.", "Bước B: Kết luận ∠A = 70°.", "Bước C: Áp dụng định lý tổng ba góc trong ΔABC: ∠A + ∠B + ∠C = 180°.", "Bước D: Tính ∠A = 180° − 110° = 70°."], "ans": [2, 0, 3, 1], "explain": "Nêu định lý (C) → Thay số (A) → Tính toán (D) → Kết luận (B).", "trap": "Học sinh hay viết bước thay số (A) trước khi phát biểu định lý tổng ba góc (C)."}, {"id": 67, "stage": 4, "level": "de", "type": "mcq", "topic": "Dạng 4: Đường trung trực & Trung điểm", "q": "Cho đoạn thẳng AB = 8 cm. Đường trung trực d của AB cắt AB tại H. Độ dài HA là:", "options": ["8 cm", "4 cm", "2 cm", "16 cm"], "ans": 1, "explain": "Đường trung trực d cắt AB tại trung điểm H của AB. Do đó HA = HB = AB / 2 = 8 / 2 = 4 cm.", "trap": "Học sinh đọc không kỹ đề bài nên lấy nguyên độ dài cả đoạn AB = 8 cm."}, {"id": 68, "stage": 4, "level": "de", "type": "input", "topic": "Dạng 4: Hai góc ở đáy tam giác cân", "q": "Cho tam giác ABC cân tại A. Biết ∠B = 65°. Tính số đo góc C (độ).", "ans": "65", "unit": "°", "explain": "Tam giác ABC cân tại A nên hai góc ở đáy bằng nhau: ∠C = ∠B = 65°.", "trap": "Học sinh nhầm góc B là góc ở đỉnh rồi tính ∠C = 180° − 65°."}, {"id": 69, "stage": 4, "level": "de", "type": "tf", "topic": "Dạng 4: Ôn tập tổng hợp tam giác vuông", "q": "Đánh giá tính Đúng (Đ) hoặc Sai (S) của các phát biểu sau về các trường hợp bằng nhau của tam giác vuông:", "items": [{"text": "a) Hai tam giác vuông bằng nhau khi có hai cạnh góc vuông của tam giác vuông này bằng hai cạnh góc vuông của tam giác vuông kia.", "ans": true}, {"text": "b) Hai tam giác vuông có một cạnh huyền bằng nhau thì luôn bằng nhau.", "ans": false}, {"text": "c) Hai tam giác vuông có cạnh huyền và một góc nhọn bằng nhau thì bằng nhau.", "ans": true}, {"text": "d) Hai tam giác vuông có hai góc nhọn bằng nhau thì bằng nhau.", "ans": false}], "explain": "a) ĐÚNG (c.g.c). b) SAI vì thiếu yếu tố góc nhọn hoặc cạnh góc vuông. c) ĐÚNG (cạnh huyền - góc nhọn). d) SAI vì thiếu yếu tố cạnh.", "trap": "Học sinh ngộ nhận trường hợp hai góc nhọn bằng nhau (d) là đủ để hai tam giác bằng nhau."}, {"id": 70, "stage": 4, "level": "de", "type": "mcq", "topic": "Dạng 4: Dấu hiệu nhận biết tam giác đều", "q": "Một tam giác có hai góc cùng bằng 60° là tam giác gì?", "options": ["Tam giác vuông", "Tam giác tù", "Tam giác đều", "Tam giác vuông cân"], "ans": 2, "explain": "Góc thứ ba = 180° − (60° + 60°) = 60°. Tam giác có ba góc bằng 60° là tam giác đều.", "trap": "Học sinh chỉ dừng lại ở kết luận tam giác cân mà quên mất 3 góc bằng nhau là tam giác đều."}, {"id": 71, "stage": 4, "level": "thuong", "type": "mcq", "topic": "Dạng 4: Tam giác cân & Góc ngoài", "q": "Cho tam giác ABC cân tại A. Gọi Ax là tia đối của tia AB. Biết góc ngoài ∠CAx = 100°. Tính số đo góc đáy B.", "options": ["100°", "80°", "50°", "40°"], "ans": 2, "explain": "Góc đỉnh ∠BAC = 180° − 100° = 80° (kề bù góc ngoài). Vì ΔABC cân tại A nên ∠B = (180° − 80°) / 2 = 50°.", "trap": "Học sinh nhầm góc ngoài bằng góc ở đáy nên chọn trực tiếp 100°.", "svg": "q71"}, {"id": 72, "stage": 4, "level": "thuong", "type": "input", "topic": "Dạng 4: Tính chất tam giác vuông cân", "q": "Cho tam giác ABC vuông cân tại A có cạnh bên AB = 5 cm. Tính độ dài cạnh AC (cm).", "ans": "5", "unit": "cm", "explain": "Tam giác ABC vuông cân tại A nên hai cạnh bên bằng nhau: AC = AB = 5 cm.", "trap": "Học sinh tính nhầm sang độ dài cạnh huyền BC thay vì đọc kỹ câu hỏi hỏi cạnh AC."}, {"id": 73, "stage": 4, "level": "thuong", "type": "match", "topic": "Dạng 4: Dấu hiệu nhận biết đặc biệt", "q": "Ghép giả thiết ở Cột A với kết luận tương ứng ở Cột B cho ΔABC:", "left": ["1) AB = AC và ∠A = 60°", "2) ∠A = 90° và AB = AC", "3) MA = MB", "4) ∠B = ∠C = 45°"], "right": ["A) ΔABC vuông cân tại A (từ cạnh & góc vuông)", "B) M thuộc đường trung trực AB", "C) ΔABC là tam giác đều", "D) ΔABC vuông cân tại A (từ hai góc đáy 45°)"], "ans": [2, 0, 1, 3], "explain": "1-C (Tam giác cân có 1 góc 60° là đều). 2-A (Tam giác vuông có 2 cạnh bằng nhau là vuông cân). 3-B (Tính chất trung trực). 4-D (Hai góc 45° ⇒ góc thứ 3 = 90° nên vuông cân).", "trap": "Học sinh chưa tính góc thứ 3 ở ý 4 nên bỏ qua tính chất vuông."}, {"id": 74, "stage": 4, "level": "thuong", "type": "mcq", "topic": "Dạng 4: Ôn tập điều kiện c.g.c", "q": "Cho ΔABC và ΔDEF có AB = DE, ∠B = ∠E. Cần thêm điều kiện nào để ΔABC = ΔDEF theo trường hợp cạnh - góc - cạnh (c.g.c)?", "options": ["AC = DF", "BC = EF", "Góc A = Góc D", "Góc C = Góc F"], "ans": 1, "explain": "Góc B phải là góc xen giữa hai cạnh AB và BC. Do đó cần thêm điều kiện BC = EF.", "trap": "Học sinh chọn nhầm AC = DF vì không chú ý vị trí góc xen giữa."}, {"id": 75, "stage": 4, "level": "thuong", "type": "tf", "topic": "Dạng 4: Mệnh đề tổng hợp tam giác cân & trung trực", "q": "Xét tính Đúng (Đ) hoặc Sai (S) của các mệnh đề hình học sau:", "items": [{"text": "a) Tam giác vuông cân có hai góc nhọn bằng nhau và bằng 45°.", "ans": true}, {"text": "b) Đường trung trực của một đoạn thẳng luôn cắt đoạn thẳng đó tại trung điểm của nó.", "ans": true}, {"text": "c) Tam giác cân có một góc tù thì hai góc còn lại bắt buộc phải là hai góc nhọn bằng nhau.", "ans": true}, {"text": "d) Tam giác cân luôn là tam giác nhọn.", "ans": false}], "explain": "a) ĐÚNG: (180°−90°)/2 = 45°. b) ĐÚNG theo định nghĩa. c) ĐÚNG vì góc tù là góc ở đỉnh. d) SAI vì tam giác cân có thể tù hoặc vuông cân.", "trap": "Học sinh hay lầm tưởng tam giác cân chỉ gồm các góc nhọn (câu d)."}, {"id": 76, "stage": 4, "level": "thuong", "type": "classify", "topic": "Dạng 4: Phân loại các trường hợp bằng nhau", "q": "Phân loại các trường hợp bằng nhau sau đây vào 2 nhóm:", "groups": ["Nhóm 1: Đặc biệt của tam giác vuông", "Nhóm 2: Tổng quát mọi tam giác"], "items": [{"text": "1) Cạnh - Cạnh - Cạnh (c.c.c)", "group": 1}, {"text": "2) Cạnh huyền - Góc nhọn", "group": 0}, {"text": "3) Cạnh - Góc - Cạnh (c.g.c)", "group": 1}, {"text": "4) Cạnh huyền - Cạnh góc vuông", "group": 0}], "explain": "Trường hợp có cụm 'Cạnh huyền' áp dụng đặc thù cho tam giác vuông. Các trường hợp c.c.c, c.g.c áp dụng tổng quát.", "trap": "Học sinh xếp nhầm c.g.c sang tam giác vuông vì nghĩ góc vuông cũng là góc."}, {"id": 77, "stage": 4, "level": "thuong", "type": "order", "topic": "Dạng 4: Chứng minh đường trung trực trong tam giác cân", "q": "Sắp xếp các bước chứng minh phân giác AD của góc đỉnh tam giác cân ABC (AB = AC) đồng thời là đường trung trực của đáy BC:", "steps": ["Bước A: Suy ra DB = DC (D là trung điểm BC) và ∠ADB = ∠ADC = 90° (AD ⊥ BC).", "Bước B: Xét ΔABD và ΔACD có AB = AC, ∠BAD = ∠CAD, AD chung.", "Bước C: Kết luận AD là đường trung trực của đoạn thẳng BC.", "Bước D: Suy ra ΔABD = ΔACD (c.g.c)."], "ans": [1, 3, 0, 2], "explain": "Xét 2 tam giác (B) → Kết luận bằng nhau c.g.c (D) → Suy ra trung điểm và vuông góc (A) → Kết luận trung trực (C).", "trap": "Học sinh rút ra ngay AD ⊥ BC trước khi chứng minh hai tam giác bằng nhau."}, {"id": 78, "stage": 4, "level": "thuong", "type": "input", "topic": "Dạng 4: Chu vi tam giác bằng nhau", "q": "Cho ΔABC = ΔDEF. Biết AB = 4 cm, BC = 6 cm, DF = 5 cm. Tính chu vi tam giác DEF (cm).", "ans": "15", "unit": "cm", "explain": "Vì ΔABC = ΔDEF nên DE = AB = 4 cm, EF = BC = 6 cm, DF = AC = 5 cm. Chu vi ΔDEF = 4 + 6 + 5 = 15 cm.", "trap": "Học sinh cộng thiếu cạnh DF hoặc nhầm cạnh tương ứng."}, {"id": 79, "stage": 4, "level": "thuong", "type": "mcq", "topic": "Dạng 4: Bài toán tổng hợp tam giác cân", "q": "Cho ΔABC cân tại A. Trên tia đối BC lấy D, trên tia đối CB lấy E sao cho BD = CE. Khẳng định nào SAI?", "options": ["ΔADE cân tại A", "AD = AE", "Góc ABD = Góc ACE", "ΔABD = ΔACE (g.c.g)"], "ans": 3, "explain": "ΔABD và ΔACE bằng nhau theo trường hợp cạnh - góc - cạnh (c.g.c) vì có AB=AC, ∠ABD=∠ACE, BD=CE, chứ không phải g.c.g (D sai).", "trap": "Học sinh không chú ý ký hiệu tên trường hợp bằng nhau c.g.c vs g.c.g."}, {"id": 80, "stage": 4, "level": "thuong", "type": "tf", "topic": "Dạng 4: Khẳng định tổng hợp toàn chương", "q": "Đánh giá tính Đúng (Đ) hoặc Sai (S) cho các khẳng định sau:", "items": [{"text": "a) Hai tam giác vuông có một cặp cạnh góc vuông bằng nhau và góc nhọn đối diện cạnh đó bằng nhau thì bằng nhau.", "ans": true}, {"text": "b) Trong tam giác cân, đường trung trực của cạnh đáy luôn đi qua đỉnh đối diện.", "ans": true}, {"text": "c) Nếu hai tam giác có ba cặp góc tương ứng bằng nhau thì hai tam giác đó bằng nhau.", "ans": false}, {"text": "d) Tam giác có hai đường cao bằng nhau là tam giác cân.", "ans": true}], "explain": "a) ĐÚNG (g.c.g). b) ĐÚNG (tính chất tam giác cân). c) SAI (ba góc bằng nhau chỉ đồng dạng, không nhất thiết bằng nhau về kích thước). d) ĐÚNG (bài toán kinh điển).", "trap": "Học sinh nhầm trường hợp ba góc bằng nhau (c) là trường hợp bằng nhau."}];
+
+
+// ====== CẤU HÌNH GỬI KẾT QUẢ VỀ GIÁO VIÊN ======
+// Dán URL Web App của Google Apps Script (kết thúc bằng /exec) vào đây một lần duy nhất.
+// Học sinh KHÔNG cần nhập gì cả: kết quả tự gửi về Google Sheets sau mỗi câu/ải.
+const GAS_URL = "https://script.google.com/macros/s/AKfycbyAtwLPcs7KaKs9fV1haV-KpDxX8i1dfhrSw5xxxytqv6Ip-HvKuEx_frXoAZoNnhpDgw/exec";
+
+// 8 dạng bài dùng để thống kê cho giáo viên (không ảnh hưởng điểm/XP/vàng của trò chơi)
+const SKILL_GROUPS = {"D1": [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 14, 15, 16, 17, 18, 65, 66], "D2": [8, 12, 13, 19, 20], "D3": [21, 22, 24, 25, 27, 29, 34, 36, 46, 47, 64, 78], "D4": [23, 26, 28, 30, 31, 32, 33, 35, 37, 38, 39, 40, 74, 79], "D5": [41, 42, 43, 44, 45, 48, 49, 50, 51, 52, 69, 76], "D6": [53, 54, 55, 56, 57, 58, 59, 60, 77], "D7": [61, 63, 68, 70, 71, 72, 73, 75], "D8": [62, 67, 80]};
+const SKILL_OF = {};
+Object.keys(SKILL_GROUPS).forEach(k => SKILL_GROUPS[k].forEach(id => { SKILL_OF[id] = k; }));
+function recordSkill(qid, isCorrect) {
+  const k = SKILL_OF[qid];
+  if (!k) return;
+  if (!state.skillStats) state.skillStats = {};
+  if (!state.skillStats[k]) state.skillStats[k] = { right: 0, total: 0 };
+  state.skillStats[k].total++;
+  if (isCorrect) state.skillStats[k].right++;
+}
+
+const WARRIOR_CLASSES = {
+  chien_binh: {
+    name: "Chiến binh",
+    icon: "⚔️",
+    maxHearts: 7,
+    perkText: "⚔️ Chiến binh (Giáp dày): Có tối đa 7 tim thay vì 5!"
+  },
+  phap_su: {
+    name: "Pháp sư",
+    icon: "🔮",
+    maxHearts: 5,
+    perkText: "🔮 Pháp sư (Thần chú): Có 2 lần gợi ý miễn phí mỗi thử thách!"
+  },
+  tham_hiem: {
+    name: "Thám hiểm",
+    icon: "🧭",
+    maxHearts: 5,
+    perkText: "🧭 Thám hiểm (Ống nhòm): Tự động loại bỏ 1 đáp án sai ở mỗi câu trắc nghiệm!"
+  },
+  tho_ren: {
+    name: "Thợ rèn",
+    icon: "🔨",
+    maxHearts: 5,
+    perkText: "🔨 Thợ rèn (Khiên rèn): Lần trả lời sai đầu tiên mỗi thử thách không mất tim!"
+  }
+};
+
+const STAGES = [
+  {
+    id: 1,
+    icon: "🏰",
+    shortName: "Thung Lũng Góc",
+    name: "Ải 1. Thung Lũng Góc Tam Giác",
+    desc: "Tổng 3 góc trong tam giác = 180°, góc ngoài tam giác, phân loại tam giác.",
+    gem: "Bảo Ngọc Góc Quang",
+    pos: "pos-left"
+  },
+  {
+    id: 2,
+    icon: "🌲",
+    shortName: "Rừng Tam Giác",
+    name: "Ải 2. Rừng Cây Tam Giác Bằng Nhau",
+    desc: "Hai tam giác bằng nhau, các trường hợp c.c.c, c.g.c, g.c.g của tam giác thường.",
+    gem: "Bảo Ngọc Cạnh Tương Ứng",
+    pos: "pos-right"
+  },
+  {
+    id: 3,
+    icon: "🏛️",
+    shortName: "Đỉnh Vuông Góc",
+    name: "Ải 3. Đỉnh Núi Tam Giác Vuông",
+    desc: "Các trường hợp bằng nhau đặc biệt của tam giác vuông (cạnh huyền – góc nhọn, cạnh huyền – cạnh góc vuông...).",
+    gem: "Bảo Ngọc Vuông Góc",
+    pos: "pos-left"
+  },
+  {
+    id: 4,
+    icon: "👑",
+    shortName: "Lâu Đài Cân Bằng",
+    name: "Ải 4. Lâu Đài Tam Giác Cân & Trung Trực",
+    desc: "Tam giác cân, đều, vuông cân; đường trung trực của đoạn thẳng và bài tập tổng hợp.",
+    gem: "Bảo Ngọc Trí Tuệ",
+    pos: "pos-center"
+  }
+];
+
+const SVGS = {
+  q13: `<svg viewBox="0 0 300 200"><polygon points="100,165 100,55 231,165" fill="#2e86c1" fill-opacity="0.12" stroke="#1b4f72" stroke-width="3"/><line x1="100" y1="55" x2="58" y2="20" stroke="#1b4f72" stroke-width="3"/><polyline points="100,145 120,145 120,165" fill="none" stroke="#c0392b" stroke-width="2"/><path d="M 78.5,37 A 28,28 0 0,0 100,83" fill="none" stroke="#c0392b" stroke-width="2.5"/><path d="M 201,165 A 30,30 0 0,1 208,145.7" fill="none" stroke="#1e8449" stroke-width="2.5"/><text x="34" y="86" fill="#c0392b" font-weight="bold" font-size="16">130°</text><text x="170" y="154" fill="#1e8449" font-weight="bold" font-size="16">?°</text><text x="82" y="184" fill="#1c2833" font-weight="bold" font-size="16">A</text><text x="106" y="52" fill="#1c2833" font-weight="bold" font-size="16">B</text><text x="236" y="184" fill="#1c2833" font-weight="bold" font-size="16">C</text><text x="44" y="18" fill="#1c2833" font-weight="bold" font-size="15">x</text></svg>`,
+  q71: `<svg viewBox="0 0 300 190"><polygon points="60,160 150,53 240,160" fill="#2e86c1" fill-opacity="0.12" stroke="#1b4f72" stroke-width="3"/><line x1="150" y1="53" x2="182" y2="15" stroke="#1b4f72" stroke-width="3"/><line x1="109.6" y1="110.4" x2="100.4" y2="102.6" stroke="#1b4f72" stroke-width="2.5"/><line x1="190.4" y1="110.4" x2="199.6" y2="102.6" stroke="#1b4f72" stroke-width="2.5"/><path d="M 169.3,30 A 30,30 0 0,1 169.3,76" fill="none" stroke="#c0392b" stroke-width="2.5"/><path d="M 88,160 A 28,28 0 0,0 78,138.6" fill="none" stroke="#1e8449" stroke-width="2.5"/><text x="196" y="58" fill="#c0392b" font-weight="bold" font-size="16">100°</text><text x="92" y="150" fill="#1e8449" font-weight="bold" font-size="15">?°</text><text x="134" y="50" fill="#1c2833" font-weight="bold" font-size="16">A</text><text x="42" y="176" fill="#1c2833" font-weight="bold" font-size="16">B</text><text x="246" y="176" fill="#1c2833" font-weight="bold" font-size="16">C</text><text x="186" y="16" fill="#1c2833" font-weight="bold" font-size="15">x</text></svg>`,
+  q12: `<svg viewBox="0 0 320 170"><line x1="20" y1="140" x2="290" y2="140" stroke="#1b4f72" stroke-width="2.5"/><line x1="20" y1="140" x2="100" y2="140" stroke="#c0392b" stroke-width="2.5" stroke-dasharray="5,4"/><polygon points="100,140 160,30 270,140" fill="rgba(46,134,193,0.12)" stroke="#1b4f72" stroke-width="3"/><path d="M 75,140 A 25,25 0 0,1 112,118" fill="none" stroke="#c0392b" stroke-width="2.5"/><text x="65" y="112" fill="#c0392b" font-weight="bold" font-size="16">?°</text><text x="145" y="22" fill="#1c2833" font-weight="bold" font-size="16">A (50°)</text><text x="95" y="162" fill="#1c2833" font-weight="bold" font-size="16">B</text><text x="260" y="162" fill="#1c2833" font-weight="bold" font-size="16">C (60°)</text></svg>`,
+  q18: `<svg viewBox="0 0 260 190"><line x1="50" y1="15" x2="50" y2="165" stroke="#2c3e50" stroke-width="4"/><line x1="50" y1="165" x2="230" y2="165" stroke="#2c3e50" stroke-width="4"/><polyline points="50,145 70,145 70,165" fill="none" stroke="#c0392b" stroke-width="2"/><line x1="50" y1="30" x2="200" y2="165" stroke="#a04000" stroke-width="5"/><text x="22" y="22" font-weight="bold" font-size="15">Tường</text><text x="205" y="162" font-weight="bold" font-size="15">Đất</text><text x="155" y="155" fill="#1b4f72" font-weight="bold" font-size="16">65°</text><text x="58" y="68" fill="#c0392b" font-weight="bold" font-size="16">?°</text></svg>`,
+  q31: `<svg viewBox="0 0 300 160"><polygon points="30,80 150,20 270,80 150,140" fill="rgba(46,134,193,0.1)" stroke="#1b4f72" stroke-width="3"/><line x1="30" y1="80" x2="270" y2="80" stroke="#c0392b" stroke-width="2.5" stroke-dasharray="6,4"/><text x="12" y="85" font-weight="bold" font-size="16">A</text><text x="145" y="16" font-weight="bold" font-size="16">B</text><text x="276" y="85" font-weight="bold" font-size="16">C</text><text x="145" y="156" font-weight="bold" font-size="16">D</text></svg>`,
+  q32: `<svg viewBox="0 0 280 175"><polygon points="140,20 40,150 240,150" fill="rgba(46,134,193,0.1)" stroke="#1b4f72" stroke-width="3"/><line x1="140" y1="20" x2="140" y2="150" stroke="#c0392b" stroke-width="2.5"/><polyline points="140,134 156,134 156,150" fill="none" stroke="#1c2833" stroke-width="2"/><text x="135" y="15" font-weight="bold" font-size="16">A</text><text x="24" y="158" font-weight="bold" font-size="16">B</text><text x="133" y="170" font-weight="bold" font-size="16">M</text><text x="245" y="158" font-weight="bold" font-size="16">C</text></svg>`,
+  q35: `<svg viewBox="0 0 300 175"><line x1="40" y1="25" x2="260" y2="25" stroke="#1b4f72" stroke-width="3"/><line x1="40" y1="145" x2="260" y2="145" stroke="#c0392b" stroke-width="3"/><line x1="40" y1="25" x2="260" y2="145" stroke="#1e8449" stroke-width="2" stroke-dasharray="5,4"/><line x1="260" y1="25" x2="40" y2="145" stroke="#1e8449" stroke-width="2" stroke-dasharray="5,4"/><circle cx="150" cy="85" r="4" fill="#c0392b"/><text x="24" y="25" font-weight="bold" font-size="16">A</text><text x="266" y="25" font-weight="bold" font-size="16">B</text><text x="24" y="150" font-weight="bold" font-size="16">D</text><text x="266" y="150" font-weight="bold" font-size="16">C</text><text x="145" y="72" fill="#c0392b" font-weight="bold" font-size="16">O</text><text x="115" y="167" fill="#c0392b" font-weight="bold" font-size="15">CD = 30m</text></svg>`,
+  q36: `<svg viewBox="0 0 280 170"><line x1="30" y1="145" x2="250" y2="145" stroke="#1c2833" stroke-width="2.5"/><line x1="30" y1="145" x2="195" y2="25" stroke="#1c2833" stroke-width="2.5"/><line x1="30" y1="145" x2="240" y2="75" stroke="#1e8449" stroke-width="2" stroke-dasharray="5,4"/><line x1="175" y1="98" x2="175" y2="145" stroke="#1b4f72" stroke-width="2.5"/><line x1="175" y1="98" x2="147" y2="60" stroke="#1b4f72" stroke-width="2.5"/><text x="14" y="152" font-weight="bold" font-size="16">O</text><text x="170" y="165" font-weight="bold" font-size="16">A</text><text x="150" y="54" font-weight="bold" font-size="16">B</text><text x="182" y="92" font-weight="bold" font-size="16">M</text></svg>`
+};
+
+const DEFAULT_STATE = {
+  name: "",
+  className: "7A",
+  mascot: "🦊",
+  warriorClass: "chien_binh",
+  hearts: 7,
+  maxHearts: 7,
+  xp: 0,
+  gold: 100,
+  sound: true,
+  items: { hint: 2, "5050": 2, skip: 1, heal: 1 },
+  stageBest: {
+    1: { score: 0, level: "", passed: false },
+    2: { score: 0, level: "", passed: false },
+    3: { score: 0, level: "", passed: false },
+    4: { score: 0, level: "", passed: false }
+  },
+  solvedIds: [],
+  wrongIds: [],
+  topicStats: {
+    1: { right: 0, total: 0 },
+    2: { right: 0, total: 0 },
+    3: { right: 0, total: 0 },
+    4: { right: 0, total: 0 }
+  },
+  gasUrl: ""
+};
+
+let state = JSON.parse(localStorage.getItem("vq_tamgiac_state_v4") || "null") || JSON.parse(JSON.stringify(DEFAULT_STATE));
+let selectedModalStage = 1;
+
+let currentQuiz = {
+  mode: "stage", // "stage" hoặc "vault" (luyện tập trong kho để lấy tim)
+  stage: 1,
+  level: "de",
+  list: [],
+  idx: 0,
+  correctCount: 0,
+  combo: 0,
+  answered: false,
+  userDraft: null,
+  freeHintsLeft: 0,
+  shieldAvailable: false
+};
+
+function shuffleArray(arr) {
+  const copy = arr.slice();
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+// Audio
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playTone(type) {
+  if (!state.sound) return;
+  try {
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+    if (type === "good") {
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(523.25, now);
+      osc.frequency.setValueAtTime(659.25, now + 0.1);
+      osc.frequency.setValueAtTime(783.99, now + 0.2);
+      gain.gain.setValueAtTime(0.18, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+      osc.start(now); osc.stop(now + 0.4);
+    } else if (type === "bad") {
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(220, now);
+      osc.frequency.setValueAtTime(165, now + 0.15);
+      gain.gain.setValueAtTime(0.15, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+      osc.start(now); osc.stop(now + 0.35);
+    } else {
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(440, now);
+      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+      osc.start(now); osc.stop(now + 0.12);
+    }
+  } catch (e) {}
+}
+
+function computeScores() {
+  let totalCorrect40 = 0;
+  for (let s = 1; s <= 4; s++) {
+    totalCorrect40 += (state.stageBest[s]?.score || 0);
+  }
+  const quizPoints = Math.round(totalCorrect40 * 0.2 * 10) / 10;
+  const xpPart = Math.min(1.2, (state.xp / 6000) * 1.2);
+  const goldPart = Math.min(0.8, (Math.max(0, state.gold - 100) / 700) * 0.8);
+  const bonusPoints = Math.min(2.0, Math.round((xpPart + goldPart) * 10) / 10);
+  const total10 = Math.min(10.0, Math.round((quizPoints + bonusPoints) * 10) / 10);
+  return { totalCorrect40, quizPoints, bonusPoints, total10 };
+}
+
+function countCompletedStages() {
+  let cnt = 0;
+  for (let s = 1; s <= 4; s++) {
+    if (state.stageBest[s]?.passed) cnt++;
+  }
+  return cnt;
+}
+
+function saveState() {
+  localStorage.setItem("vq_tamgiac_state_v4", JSON.stringify(state));
+  updateHeaderUI();
+}
+
+function toggleSound() {
+  state.sound = !state.sound;
+  saveState();
+}
+
+function selectAvatar(el) {
+  document.querySelectorAll(".avatar-pick").forEach(m => m.classList.remove("selected"));
+  el.classList.add("selected");
+  state.mascot = el.dataset.emoji;
+  playTone("click");
+}
+
+function selectWarriorClass(el) {
+  document.querySelectorAll(".warrior-card").forEach(c => c.classList.remove("selected"));
+  el.classList.add("selected");
+  state.warriorClass = el.dataset.class;
+  playTone("click");
+}
+
+// ==================== TRANG CHỦ & CHƠI TIẾP ====================
+function renderHomeScreen() {
+  const completedCount = countCompletedStages();
+  const contCard = document.getElementById("continuePlayCard");
+  if (state.name && completedCount < 4) {
+    const sc = computeScores();
+    const wc = WARRIOR_CLASSES[state.warriorClass] || WARRIOR_CLASSES.chien_binh;
+    contCard.style.display = "block";
+    document.getElementById("contAvatar").textContent = state.mascot;
+    document.getElementById("contName").textContent = `${state.name} (${state.className})`;
+    document.getElementById("contProgressText").textContent = `${wc.icon} ${wc.name} • Vượt ${completedCount}/4 ải • ❤️ ${state.hearts}/${state.maxHearts} tim • ${sc.total10.toFixed(1)}/10đ`;
+  } else {
+    contCard.style.display = "none";
+  }
+}
+
+function resumeGame() {
+  playTone("click");
+  showMainInterface();
+}
+
+function startNewGame() {
+  const nameVal = document.getElementById("inpName").value.trim();
+  if (!nameVal) {
+    alert("Vui lòng nhập họ và tên của em trước khi lên đường!");
+    return;
+  }
+  const clsVal = document.getElementById("inpClass").value;
+  const mascotVal = state.mascot || "🦊";
+  const wClassVal = state.warriorClass || "chien_binh";
+  const wcInfo = WARRIOR_CLASSES[wClassVal] || WARRIOR_CLASSES.chien_binh;
+  const savedGas = state.gasUrl || "";
+
+  state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+  state.name = nameVal;
+  state.className = clsVal;
+  state.mascot = mascotVal;
+  state.warriorClass = wClassVal;
+  state.maxHearts = wcInfo.maxHearts;
+  state.hearts = wcInfo.maxHearts;
+  state.gasUrl = savedGas;
+  saveState();
+  showMainInterface();
+}
+
+function goHomeScreen() {
+  document.getElementById("topBar").style.display = "none";
+  document.getElementById("bottomNav").style.display = "none";
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById("screen-setup").classList.add("active");
+  renderHomeScreen();
+}
+
+function exitToHome() {
+  goHomeScreen();
+}
+
+function showMainInterface() {
+  document.getElementById("screen-setup").classList.remove("active");
+  document.getElementById("topBar").style.display = "block";
+  document.getElementById("bottomNav").style.display = "flex";
+  updateHeaderUI();
+  switchTab("map");
+}
+
+function updateHeaderUI() {
+  const sc = computeScores();
+  const lvl = Math.floor(state.xp / 1000) + 1;
+  const pct = (state.xp % 1000) / 10;
+  const wc = WARRIOR_CLASSES[state.warriorClass] || WARRIOR_CLASSES.chien_binh;
+
+  document.getElementById("hdrAvatar").textContent = state.mascot;
+  document.getElementById("hdrName").textContent = `${state.name || "Học sinh"} (${wc.icon} ${wc.name})`;
+  document.getElementById("hdrXpFill").style.width = `${pct}%`;
+  document.getElementById("hdrXpText").textContent = `Cấp ${lvl} • ${state.xp} XP • Lớp ${state.className}`;
+  document.getElementById("hdrGold").textContent = state.gold;
+  document.getElementById("hdrScore10").textContent = sc.total10.toFixed(1);
+  document.getElementById("hdrHeartsSummary").textContent = `❤️ ${state.hearts}/${state.maxHearts} tim • Toán 7 KNTT`;
+  document.getElementById("btnSound").textContent = state.sound ? "🔊" : "🔇";
+
+  const vDot = document.getElementById("navVaultCount");
+  if (state.wrongIds.length > 0) {
+    vDot.style.display = "inline-block";
+    vDot.textContent = state.wrongIds.length;
+  } else {
+    vDot.style.display = "none";
+  }
+}
+
+function switchTab(tab) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+  const navBtn = document.querySelector(`.nav-item[data-tab="${tab}"]`);
+  if (navBtn) navBtn.classList.add("active");
+
+  if (tab === "map") {
+    document.getElementById("screen-map").classList.add("active");
+    renderWindingMap();
+  } else if (tab === "shop") {
+    document.getElementById("screen-shop").classList.add("active");
+  } else if (tab === "badges") {
+    document.getElementById("screen-badges").classList.add("active");
+    renderBadgesAndVault();
+  } else if (tab === "profile") {
+    document.getElementById("screen-profile").classList.add("active");
+    renderProfile();
+  }
+}
+
+// ==================== BẢN ĐỒ 4 ẢI & CHỌN MỨC ĐỘ ====================
+function isStageUnlocked(stageId) {
+  if (stageId === 1) return true;
+  return Boolean(state.stageBest[stageId - 1]?.passed);
+}
+
+function renderWindingMap() {
+  const wrap = document.getElementById("windingNodesWrap");
+  wrap.innerHTML = "";
+  const noHeartBox = document.getElementById("mapNoHeartAlert");
+  noHeartBox.style.display = state.hearts <= 0 ? "block" : "none";
+
+  const reversedStages = [...STAGES].reverse();
+  reversedStages.forEach(st => {
+    const unlocked = isStageUnlocked(st.id);
+    const best = state.stageBest[st.id] || { score: 0, level: "", passed: false };
+
+    const row = document.createElement("div");
+    row.className = `map-node-row ${st.pos} ${unlocked ? "" : "locked"} ${best.passed ? "completed" : ""}`;
+    row.onclick = () => {
+      if (state.hearts <= 0) {
+        playTone("bad");
+        alert("💔 Em đã hết tim! Hãy vào mục 'Kho lấy tim' bên dưới để luyện tập lại các câu sai và hồi phục tim nhé!");
+        switchTab("badges");
+        return;
+      }
+      if (!unlocked) {
+        playTone("bad");
+        alert(`🔒 Em cần vượt qua Ải ${st.id - 1} (đạt ≥ 6/10 câu) để mở khóa ${st.name} nhé!`);
+        return;
+      }
+      openLevelModal(st.id);
+    };
+
+    const circleIcon = !unlocked ? "🔒" : (best.passed ? "💎" : st.icon);
+    const statusText = !unlocked
+      ? "Chưa mở khóa"
+      : (best.score > 0 ? `Cao nhất: ${best.score}/10 (${best.level === "thuong" ? "Thường" : "Dễ"})` : "Sẵn sàng khiêu chiến");
+
+    row.innerHTML = `
+      <div class="node-circle">${circleIcon}</div>
+      <div class="node-badge-pill">${st.shortName}</div>
+      <div class="node-sub-tag">${statusText}</div>
+    `;
+    wrap.appendChild(row);
+  });
+
+  const completedAll = countCompletedStages() === 4;
+  document.getElementById("btnViewFinalResult").style.display = completedAll ? "inline-flex" : "none";
+}
+
+function openLevelModal(stageId) {
+  playTone("click");
+  selectedModalStage = stageId;
+  const st = STAGES.find(s => s.id === stageId);
+  const best = state.stageBest[stageId] || { score: 0, level: "" };
+
+  document.getElementById("lvlModalIcon").textContent = st.icon;
+  document.getElementById("lvlModalTitle").textContent = st.name;
+  document.getElementById("lvlModalDesc").textContent = st.desc + ` (Hiện có ${state.hearts}/${state.maxHearts} tim • Đúng +0,2đ/câu)`;
+  document.getElementById("lvlEasyBest").textContent = best.level === "de" ? `Đã đạt: ${best.score}/10 câu` : "Mức cơ bản";
+  document.getElementById("lvlNormalBest").textContent = best.level === "thuong" ? `Đã đạt: ${best.score}/10 câu` : "Khuyến khích điểm cao";
+
+  document.getElementById("levelModal").classList.add("active");
+}
+
+function closeLevelModal() {
+  document.getElementById("levelModal").classList.remove("active");
+}
+
+function confirmStartLevel(level) {
+  closeLevelModal();
+  startLevel(selectedModalStage, level);
+}
+
+// ==================== QUIZ ENGINE (HỖ TRỢ THẦN CHIẾN & KHO LẤY TIM) ====================
+function startLevel(stage, level) {
+  if (state.hearts <= 0) {
+    alert("💔 Em đã hết tim! Vui lòng vào Kho luyện tập câu sai để lấy tim.");
+    switchTab("badges");
+    return;
+  }
+  playTone("click");
+  const rawList = QUESTIONS.filter(q => q.stage === stage && q.level === level);
+  const shuffledList = shuffleArray(rawList);
+  const wc = WARRIOR_CLASSES[state.warriorClass] || WARRIOR_CLASSES.chien_binh;
+
+  currentQuiz = {
+    mode: "stage",
+    stage,
+    level,
+    list: shuffledList,
+    idx: 0,
+    correctCount: 0,
+    combo: 0,
+    answered: false,
+    userDraft: null,
+    freeHintsLeft: state.warriorClass === "phap_su" ? 2 : 0,
+    shieldAvailable: state.warriorClass === "tho_ren"
+  };
+
+  document.getElementById("bottomNav").style.display = "none";
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById("screen-quiz").classList.add("active");
+  renderQuestion();
+}
+
+// BẮT ĐẦU LUYỆN TẬP CÂU SAI TRONG KHO ĐỂ LẤY TIM
+function startVaultPractice() {
+  if (state.wrongIds.length === 0) {
+    alert("🌟 Kho câu sai hiện đang trống! Em không có câu nào làm sai.");
+    return;
+  }
+  if (state.hearts >= state.maxHearts) {
+    alert(`❤️ Số tim của em đã đầy (${state.hearts}/${state.maxHearts} tim). Hãy ra bản đồ chinh phục các ải ngay!`);
+    switchTab("map");
+    return;
+  }
+  playTone("click");
+  const vaultQuestions = shuffleArray(
+    state.wrongIds.map(id => QUESTIONS.find(q => q.id === id)).filter(Boolean)
+  );
+
+  currentQuiz = {
+    mode: "vault",
+    stage: 0,
+    level: "vault",
+    list: vaultQuestions,
+    idx: 0,
+    correctCount: 0,
+    combo: 0,
+    answered: false,
+    userDraft: null,
+    freeHintsLeft: 0,
+    shieldAvailable: false
+  };
+
+  document.getElementById("bottomNav").style.display = "none";
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById("screen-quiz").classList.add("active");
+  renderQuestion();
+}
+
+function exitQuiz() {
+  if (currentQuiz.mode === "vault") {
+    document.getElementById("bottomNav").style.display = "flex";
+    switchTab("badges");
+    return;
+  }
+  if (confirm("Thoát giữa chừng sẽ không lưu điểm lượt chơi này. Em chắc chắn muốn quay về bản đồ?")) {
+    document.getElementById("bottomNav").style.display = "flex";
+    switchTab("map");
+  }
+}
+
+function renderHeartsVisual() {
+  return "❤️".repeat(Math.max(0, state.hearts)) + "🖤".repeat(Math.max(0, state.maxHearts - state.hearts));
+}
+
+function renderQuestion() {
+  const q = currentQuiz.list[currentQuiz.idx];
+  currentQuiz.answered = false;
+  currentQuiz.userDraft = null;
+
+  document.getElementById("quizProgress").style.width = `${(currentQuiz.idx / currentQuiz.list.length) * 100}%`;
+  document.getElementById("quizHearts").textContent = renderHeartsVisual();
+
+  const wc = WARRIOR_CLASSES[state.warriorClass] || WARRIOR_CLASSES.chien_binh;
+  const perkBanner = document.getElementById("warriorPerkBanner");
+  if (currentQuiz.mode === "vault") {
+    perkBanner.textContent = `📦 Chế độ Luyện Tập Kho Câu Sai: Làm đúng 1 câu lấy lại +1 ❤️ (Hiện có ${state.hearts}/${state.maxHearts} tim)`;
+  } else {
+    let extraStatus = "";
+    if (state.warriorClass === "phap_su") extraStatus = ` (Còn ${currentQuiz.freeHintsLeft} gợi ý miễn phí)`;
+    if (state.warriorClass === "tho_ren") extraStatus = currentQuiz.shieldAvailable ? " (Khiên đang bật 🛡️)" : " (Đã dùng khiên)";
+    perkBanner.textContent = wc.perkText + extraStatus;
+  }
+
+  const totalHintsAvailable = state.items.hint + (currentQuiz.mode === "stage" ? currentQuiz.freeHintsLeft : 0);
+  document.getElementById("cntHint").textContent = totalHintsAvailable;
+  document.getElementById("cnt5050").textContent = state.items["5050"];
+  document.getElementById("cntSkip").textContent = state.items.skip;
+  document.getElementById("cntHeal").textContent = state.items.heal;
+
+  document.getElementById("btnHint").disabled = totalHintsAvailable <= 0;
+  document.getElementById("btn5050").disabled = state.items["5050"] <= 0 || q.type !== "mcq";
+  document.getElementById("btnSkip").disabled = state.items.skip <= 0 || currentQuiz.mode === "vault";
+  document.getElementById("btnHeal").disabled = state.items.heal <= 0 || state.hearts >= state.maxHearts;
+
+  const typeNames = {
+    mcq: "Trắc nghiệm",
+    tf: "Đúng / Sai (4 ý)",
+    input: "Điền đáp án ngắn",
+    match: "Ghép đôi",
+    order: "Sắp xếp bước giải",
+    classify: "Phân loại nhóm"
+  };
+
+  document.getElementById("qCounter").textContent = currentQuiz.mode === "vault"
+    ? `Ôn kho ${currentQuiz.idx + 1}/${currentQuiz.list.length}`
+    : `Câu ${currentQuiz.idx + 1}/10 (${currentQuiz.level === "de" ? "Mức Dễ" : "Mức Thường"})`;
+  document.getElementById("qTypeBadge").textContent = typeNames[q.type] || "Câu hỏi";
+  document.getElementById("qTopic").textContent = q.topic;
+  document.getElementById("qText").textContent = `${q.q}`;
+
+  const svgBox = document.getElementById("qSvgBox");
+  if (q.svg && SVGS[q.svg]) {
+    svgBox.innerHTML = SVGS[q.svg];
+    svgBox.style.display = "block";
+  } else {
+    svgBox.style.display = "none";
+  }
+
+  document.getElementById("hintBanner").style.display = "none";
+  document.getElementById("feedbackBox").style.display = "none";
+  document.getElementById("btnSubmitAnswer").style.display = "inline-flex";
+  document.getElementById("btnNextQuestion").style.display = "none";
+
+  const area = document.getElementById("qInteractiveArea");
+  area.innerHTML = "";
+
+  if (q.type === "mcq") {
+    currentQuiz.userDraft = -1;
+    const listDiv = document.createElement("div");
+    listDiv.className = "opt-list";
+    const letters = ["A", "B", "C", "D"];
+
+    // Kỹ năng Thám hiểm: tự động loại bỏ 1 đáp án sai ở mỗi câu trắc nghiệm
+    let autoEliminateIdx = -1;
+    if (currentQuiz.mode === "stage" && state.warriorClass === "tham_hiem") {
+      const wrongs = [0, 1, 2, 3].filter(idx => idx !== q.ans);
+      autoEliminateIdx = wrongs[Math.floor(Math.random() * wrongs.length)];
+    }
+
+    q.options.forEach((opt, i) => {
+      const btn = document.createElement("button");
+      btn.className = "opt-btn" + (i === autoEliminateIdx ? " eliminated" : "");
+      btn.dataset.idx = i;
+      btn.innerHTML = `<span class="opt-letter">${letters[i]}</span><span>${opt}</span>`;
+      btn.onclick = () => {
+        if (currentQuiz.answered) return;
+        playTone("click");
+        document.querySelectorAll(".opt-btn").forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        currentQuiz.userDraft = i;
+      };
+      listDiv.appendChild(btn);
+    });
+    area.appendChild(listDiv);
+  }
+  else if (q.type === "tf") {
+    currentQuiz.userDraft = [null, null, null, null];
+    q.items.forEach((item, i) => {
+      const row = document.createElement("div");
+      row.className = "tf-row";
+      row.innerHTML = `
+        <div class="tf-statement">${item.text}</div>
+        <div class="tf-btns">
+          <button class="tf-choice" id="tf_${i}_true" onclick="pickTF(${i}, true)">ĐÚNG (Đ)</button>
+          <button class="tf-choice" id="tf_${i}_false" onclick="pickTF(${i}, false)">SAI (S)</button>
+        </div>
+      `;
+      area.appendChild(row);
+    });
+  }
+  else if (q.type === "input") {
+    currentQuiz.userDraft = "";
+    area.innerHTML = `
+      <div class="short-input-wrap">
+        <input type="text" id="shortAnsInput" class="short-input" placeholder="Nhập số..." readonly>
+        <span style="font-size:24px; font-weight:bold; color:var(--primary);">${q.unit || ""}</span>
+      </div>
+      <div class="numpad">
+        ${["7","8","9","⌫","4","5","6","C","1","2","3","0"].map(k =>
+          `<button class="num-key" onclick="pressNum('${k}')">${k}</button>`
+        ).join("")}
+      </div>
+    `;
+  }
+  else if (q.type === "match") {
+    currentQuiz.userDraft = [-1, -1, -1, -1];
+    q.left.forEach((lText, i) => {
+      const row = document.createElement("div");
+      row.className = "match-row";
+      const optsHtml = `<option value="-1">-- Chọn đáp án tương ứng --</option>` +
+        q.right.map((rText, rIdx) => `<option value="${rIdx}">${rText}</option>`).join("");
+      row.innerHTML = `
+        <div class="match-left">${lText}</div>
+        <select class="match-select" onchange="pickMatch(${i}, this.value)">${optsHtml}</select>
+      `;
+      area.appendChild(row);
+    });
+  }
+  else if (q.type === "order") {
+    let indices = q.steps.map((_, i) => i);
+    if (indices.length > 1) indices = indices.slice(1).concat(indices[0]);
+    currentQuiz.userDraft = indices;
+    renderOrderList(q);
+  }
+  else if (q.type === "classify") {
+    currentQuiz.userDraft = q.items.map(() => -1);
+    q.items.forEach((item, i) => {
+      const card = document.createElement("div");
+      card.className = "classify-card";
+      card.innerHTML = `
+        <div style="font-weight:bold; font-size:19px;">${item.text}</div>
+        <div class="classify-btns">
+          <button class="cls-btn" id="cls_${i}_0" onclick="pickClassify(${i}, 0)">${q.groups[0]}</button>
+          <button class="cls-btn" id="cls_${i}_1" onclick="pickClassify(${i}, 1)">${q.groups[1]}</button>
+        </div>
+      `;
+      area.appendChild(card);
+    });
+  }
+}
+
+function pickTF(idx, val) {
+  if (currentQuiz.answered) return;
+  playTone("click");
+  currentQuiz.userDraft[idx] = val;
+  document.getElementById(`tf_${idx}_true`).className = "tf-choice" + (val === true ? " active-true" : "");
+  document.getElementById(`tf_${idx}_false`).className = "tf-choice" + (val === false ? " active-false" : "");
+}
+
+function pressNum(key) {
+  if (currentQuiz.answered) return;
+  playTone("click");
+  const inp = document.getElementById("shortAnsInput");
+  if (key === "C") currentQuiz.userDraft = "";
+  else if (key === "⌫") currentQuiz.userDraft = currentQuiz.userDraft.slice(0, -1);
+  else if (currentQuiz.userDraft.length < 6) currentQuiz.userDraft += key;
+  inp.value = currentQuiz.userDraft;
+}
+
+function pickMatch(leftIdx, rightVal) {
+  if (currentQuiz.answered) return;
+  playTone("click");
+  currentQuiz.userDraft[leftIdx] = parseInt(rightVal, 10);
+}
+
+function renderOrderList(q) {
+  const area = document.getElementById("qInteractiveArea");
+  area.innerHTML = "";
+  currentQuiz.userDraft.forEach((stepIdx, pos) => {
+    const div = document.createElement("div");
+    div.className = "order-item";
+    div.innerHTML = `
+      <div class="order-num">${pos + 1}</div>
+      <div class="order-text">${q.steps[stepIdx]}</div>
+      <div class="order-arrows">
+        <button class="arr-btn" onclick="moveOrder(${pos}, -1)" ${pos === 0 ? "disabled" : ""}>▲</button>
+        <button class="arr-btn" onclick="moveOrder(${pos}, 1)" ${pos === currentQuiz.userDraft.length - 1 ? "disabled" : ""}>▼</button>
+      </div>
+    `;
+    area.appendChild(div);
+  });
+}
+
+function moveOrder(pos, dir) {
+  if (currentQuiz.answered) return;
+  playTone("click");
+  const arr = currentQuiz.userDraft;
+  const target = pos + dir;
+  if (target < 0 || target >= arr.length) return;
+  [arr[pos], arr[target]] = [arr[target], arr[pos]];
+  renderOrderList(currentQuiz.list[currentQuiz.idx]);
+}
+
+function pickClassify(itemIdx, groupIdx) {
+  if (currentQuiz.answered) return;
+  playTone("click");
+  currentQuiz.userDraft[itemIdx] = groupIdx;
+  document.getElementById(`cls_${itemIdx}_0`).className = "cls-btn" + (groupIdx === 0 ? " selected" : "");
+  document.getElementById(`cls_${itemIdx}_1`).className = "cls-btn" + (groupIdx === 1 ? " selected" : "");
+}
+
+function usePowerUp(type) {
+  if (currentQuiz.answered) return;
+  const q = currentQuiz.list[currentQuiz.idx];
+
+  if (type === "hint") {
+    const totalHints = state.items.hint + (currentQuiz.mode === "stage" ? currentQuiz.freeHintsLeft : 0);
+    if (totalHints <= 0) return;
+    if (currentQuiz.mode === "stage" && currentQuiz.freeHintsLeft > 0) {
+      currentQuiz.freeHintsLeft--;
+    } else {
+      state.items.hint--;
+    }
+    const banner = document.getElementById("hintBanner");
+    banner.innerHTML = `💡 <strong>Gợi ý:</strong> ${q.explain.split(".")[0]}.`;
+    banner.style.display = "block";
+    document.getElementById("cntHint").textContent = state.items.hint + (currentQuiz.mode === "stage" ? currentQuiz.freeHintsLeft : 0);
+    document.getElementById("btnHint").disabled = true;
+    playTone("good");
+  } else if (type === "5050" && q.type === "mcq" && state.items["5050"] > 0) {
+    state.items["5050"]--;
+    let wrongIndices = [0, 1, 2, 3].filter(i => i !== q.ans);
+    wrongIndices.sort(() => Math.random() - 0.5);
+    wrongIndices.slice(0, 2).forEach(idx => {
+      const btn = document.querySelector(`.opt-btn[data-idx="${idx}"]`);
+      if (btn) btn.classList.add("eliminated");
+    });
+    document.getElementById("cnt5050").textContent = state.items["5050"];
+    document.getElementById("btn5050").disabled = true;
+    playTone("good");
+  } else if (type === "skip" && state.items.skip > 0 && currentQuiz.mode === "stage") {
+    state.items.skip--;
+    saveState();
+    currentQuiz.correctCount++;
+    nextQuestion();
+    return;
+  } else if (type === "heal" && state.items.heal > 0 && state.hearts < state.maxHearts) {
+    state.items.heal--;
+    state.hearts = Math.min(state.maxHearts, state.hearts + 2);
+    document.getElementById("quizHearts").textContent = renderHeartsVisual();
+    document.getElementById("cntHeal").textContent = state.items.heal;
+    document.getElementById("btnHeal").disabled = true;
+    playTone("good");
+  }
+  saveState();
+}
+
+function checkCurrentAnswer() {
+  if (currentQuiz.answered) return;
+  const q = currentQuiz.list[currentQuiz.idx];
+  let isCorrect = false;
+
+  if (q.type === "mcq") {
+    if (currentQuiz.userDraft === -1) { alert("Em hãy chọn 1 phương án A, B, C hoặc D nhé!"); return; }
+    isCorrect = currentQuiz.userDraft === q.ans;
+    document.querySelectorAll(".opt-btn").forEach((btn, i) => {
+      if (i === q.ans) btn.classList.add("correct");
+      else if (i === currentQuiz.userDraft) btn.classList.add("wrong");
+    });
+  }
+  else if (q.type === "tf") {
+    if (currentQuiz.userDraft.includes(null)) { alert("Em hãy chọn Đúng hoặc Sai cho cả 4 mệnh đề nhé!"); return; }
+    isCorrect = q.items.every((item, i) => item.ans === currentQuiz.userDraft[i]);
+  }
+  else if (q.type === "input") {
+    if (!currentQuiz.userDraft) { alert("Em hãy nhập đáp án số bằng bàn phím bên dưới nhé!"); return; }
+    isCorrect = currentQuiz.userDraft.trim() === q.ans;
+  }
+  else if (q.type === "match") {
+    if (currentQuiz.userDraft.includes(-1)) { alert("Em hãy ghép đầy đủ cả 4 cặp nhé!"); return; }
+    isCorrect = q.ans.every((val, i) => val === currentQuiz.userDraft[i]);
+  }
+  else if (q.type === "order") {
+    isCorrect = q.ans.every((val, i) => val === currentQuiz.userDraft[i]);
+  }
+  else if (q.type === "classify") {
+    if (currentQuiz.userDraft.includes(-1)) { alert("Em hãy phân loại tất cả các mục vào 2 nhóm nhé!"); return; }
+    isCorrect = q.items.every((item, i) => item.group === currentQuiz.userDraft[i]);
+  }
+
+  currentQuiz.answered = true;
+  const fbBox = document.getElementById("feedbackBox");
+  const fbTitle = document.getElementById("fbTitle");
+  const fbExplain = document.getElementById("fbExplain");
+  const fbTrap = document.getElementById("fbTrap");
+
+  // CHẾ ĐỘ LUYỆN TẬP TRONG KHO ĐỂ LẤY TIM
+  if (currentQuiz.mode === "vault") {
+    if (isCorrect) {
+      playTone("good");
+      currentQuiz.correctCount++;
+      state.hearts = Math.min(state.maxHearts, state.hearts + 1);
+      // Xóa câu đã làm đúng khỏi kho câu sai
+      state.wrongIds = state.wrongIds.filter(id => id !== q.id);
+      if (!state.solvedIds.includes(q.id)) state.solvedIds.push(q.id);
+      document.getElementById("quizHearts").textContent = renderHeartsVisual();
+
+      fbBox.className = "feedback-box correct";
+      fbTitle.innerHTML = `💖 CHÍNH XÁC! Em đã lấy lại +1 ❤️ (Hiện có ${state.hearts}/${state.maxHearts} tim)`;
+    } else {
+      playTone("bad");
+      fbBox.className = "feedback-box wrong";
+      fbTitle.innerHTML = `❌ CHƯA ĐÚNG! Câu hỏi vẫn được giữ lại trong kho để em ôn tiếp.`;
+    }
+    fbExplain.innerHTML = `<strong>💡 Hướng dẫn giải:</strong> ${q.explain}`;
+    fbTrap.innerHTML = `<strong>⚠️ Lỗi sai thường gặp:</strong> ${q.trap}`;
+    fbBox.style.display = "block";
+    document.getElementById("btnSubmitAnswer").style.display = "none";
+    document.getElementById("btnNextQuestion").style.display = "inline-flex";
+    saveState();
+    return;
+  }
+
+  // CHẾ ĐỘ CHƠI ẢI CHÍNH
+  state.topicStats[q.stage].total++;
+  recordSkill(q.id, isCorrect);
+
+  if (isCorrect) {
+    playTone("good");
+    currentQuiz.correctCount++;
+    currentQuiz.combo++;
+    state.topicStats[q.stage].right++;
+
+    let gainedXP = currentQuiz.level === "de" ? 100 : 160;
+    let gainedGold = currentQuiz.level === "de" ? 15 : 25;
+    let bonusText = "";
+    if (currentQuiz.combo >= 3) {
+      gainedXP += (currentQuiz.level === "de" ? 30 : 60);
+      bonusText = ` (🔥 Combo 3+ thưởng thêm XP!)`;
+    }
+    state.xp += gainedXP;
+    state.gold += gainedGold;
+
+    if (!state.solvedIds.includes(q.id)) state.solvedIds.push(q.id);
+    state.wrongIds = state.wrongIds.filter(id => id !== q.id);
+
+    fbBox.className = "feedback-box correct";
+    fbTitle.innerHTML = `🎉 CHÍNH XÁC! +0,2 điểm • +${gainedXP} XP • +${gainedGold} 🪙${bonusText}`;
+  } else {
+    playTone("bad");
+    currentQuiz.combo = 0;
+
+    // Đưa câu hỏi trả lời sai vào KHO câu sai
+    if (!state.wrongIds.includes(q.id)) state.wrongIds.push(q.id);
+
+    // Kiểm tra Khiên rèn của Thợ rèn (lần sai đầu tiên mỗi thử thách không mất tim)
+    if (currentQuiz.shieldAvailable) {
+      currentQuiz.shieldAvailable = false;
+      fbBox.className = "feedback-box wrong";
+      fbTitle.innerHTML = `🛡️ KHIÊN RÈN ĐỠ ĐÒN! Lần sai đầu tiên không mất tim (Câu hỏi đã lưu vào Kho).`;
+    } else {
+      state.hearts = Math.max(0, state.hearts - 1);
+      document.getElementById("quizHearts").textContent = renderHeartsVisual();
+      fbBox.className = "feedback-box wrong";
+      fbTitle.innerHTML = `❌ CHƯA CHÍNH XÁC! Mất 1 tim (còn ${state.hearts} ❤️) • Đã lưu vào Kho câu sai.`;
+    }
+  }
+
+  fbExplain.innerHTML = `<strong>💡 Hướng dẫn giải:</strong> ${q.explain}`;
+  fbTrap.innerHTML = `<strong>⚠️ Lỗi sai thường gặp:</strong> ${q.trap}`;
+  fbBox.style.display = "block";
+
+  document.getElementById("btnSubmitAnswer").style.display = "none";
+  document.getElementById("btnNextQuestion").style.display = "inline-flex";
+  saveState();
+  autoSendToTeacher();   // gửi kết quả về giáo viên sau mỗi câu
+}
+
+function nextQuestion() {
+  if (currentQuiz.mode === "vault") {
+    currentQuiz.idx++;
+    if (state.hearts >= state.maxHearts || currentQuiz.idx >= currentQuiz.list.length) {
+      alert(`💖 Hoàn thành lượt luyện tập kho! Em đã hồi phục được +${currentQuiz.correctCount} tim (Hiện có ${state.hearts}/${state.maxHearts} tim).`);
+      document.getElementById("bottomNav").style.display = "flex";
+      switchTab("map");
+    } else {
+      renderQuestion();
+    }
+    return;
+  }
+
+  // Nếu hết tim giữa ải: mời học sinh vào Kho luyện tập lấy tim
+  if (state.hearts <= 0) {
+    saveState();
+    autoSendToTeacher();
+    alert("💔 Em đã hết sạch tim năng lượng! Hệ thống sẽ đưa em vào Kho câu sai để luyện tập lấy lại tim rồi tiếp tục chinh phục các ải nhé!");
+    document.getElementById("bottomNav").style.display = "flex";
+    switchTab("badges");
+    return;
+  }
+
+  currentQuiz.idx++;
+  if (currentQuiz.idx >= currentQuiz.list.length) {
+    finishLevel();
+  } else {
+    renderQuestion();
+  }
+}
+
+function finishLevel() {
+  const prevBest = state.stageBest[currentQuiz.stage] || { score: 0, level: "", passed: false };
+  if (
+    currentQuiz.correctCount > prevBest.score ||
+    (currentQuiz.correctCount === prevBest.score && currentQuiz.level === "thuong")
+  ) {
+    state.stageBest[currentQuiz.stage] = {
+      score: currentQuiz.correctCount,
+      level: currentQuiz.level,
+      passed: currentQuiz.correctCount >= 6
+    };
+  }
+
+  const passed = currentQuiz.correctCount >= 6;
+  const stageGoldBonus = passed ? (currentQuiz.level === "de" ? 60 : 120) : 15;
+  const stageXpBonus = passed ? (currentQuiz.level === "de" ? 150 : 300) : 30;
+  state.gold += stageGoldBonus;
+  state.xp += stageXpBonus;
+  saveState();
+
+  autoSendToTeacher();
+
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById("screen-summary").classList.add("active");
+
+  const stagePts = (currentQuiz.correctCount * 0.2).toFixed(1);
+  document.getElementById("sumEmoji").textContent = passed ? "🏆" : "💪";
+  document.getElementById("sumTitle").textContent = passed ? "VƯỢT ẢI THÀNH CÔNG!" : "CẦN CỐ GẮNG THÊM!";
+  document.getElementById("sumSub").textContent = `${STAGES[currentQuiz.stage - 1].name} • Mức ${currentQuiz.level === "de" ? "Dễ" : "Thường"}`;
+  document.getElementById("sumScore").textContent = `${currentQuiz.correctCount}/10 (+${stagePts}đ)`;
+  document.getElementById("sumReward").textContent = `+${stageXpBonus} XP • +${stageGoldBonus} 🪙`;
+
+  const statusMsg = document.getElementById("sumStatusMsg");
+  if (passed) {
+    statusMsg.style.background = "var(--success-bg)";
+    statusMsg.style.color = "var(--success)";
+    statusMsg.textContent = countCompletedStages() === 4
+      ? "🎉 Tuyệt vời! Em đã hoàn thành trọn vẹn cả 4 ải!"
+      : "✨ Chúc mừng! Em đã mở khóa ải tiếp theo trên bản đồ.";
+  } else {
+    statusMsg.style.background = "var(--danger-bg)";
+    statusMsg.style.color = "var(--danger)";
+    statusMsg.textContent = "⚠️ Em cần đạt tối thiểu 6/10 câu để mở khóa ải tiếp theo. Hãy thử lại nhé!";
+  }
+}
+
+function afterStageSummary() {
+  document.getElementById("bottomNav").style.display = "flex";
+  if (countCompletedStages() === 4) {
+    showFinalResultScreen();
+  } else {
+    switchTab("map");
+  }
+}
+
+function showFinalResultScreen() {
+  autoSendToTeacher();
+  const sc = computeScores();
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById("screen-final").classList.add("active");
+
+  document.getElementById("finalStudentInfo").textContent = `Học sinh: ${state.name} • Lớp ${state.className} • THCS Nam Đàn`;
+  document.getElementById("finalTotalScore").textContent = `${sc.total10.toFixed(1)} / 10 điểm`;
+  document.getElementById("finalQuizPoints").textContent = `${sc.quizPoints.toFixed(1)} / 8.0 đ`;
+  document.getElementById("finalCorrectCount").textContent = `(Đúng ${sc.totalCorrect40}/40 câu × 0,2đ)`;
+  document.getElementById("finalBonusPoints").textContent = `${sc.bonusPoints.toFixed(1)} / 2.0 đ`;
+  document.getElementById("finalXpGoldDetail").textContent = `(${state.xp} XP • ${state.gold} 🪙)`;
+
+  let rank = "Nhà Hình Học Triển Vọng";
+  if (sc.total10 >= 9.0) rank = "Đại Sứ Hình Học Xuất Sắc (Mức Thường)";
+  else if (sc.total10 >= 8.0) rank = "Hiệp Sĩ Tam Giác Giỏi";
+  document.getElementById("finalRankLabel").textContent = `Danh hiệu: ${rank}`;
+}
+
+// ==================== SHOP, KHO LẤY TIM & PROFILE ====================
+function buyItem(itemKey, price) {
+  if (state.gold < price) {
+    alert("Em chưa đủ tiền vàng (🪙)!");
+    return;
+  }
+  if (itemKey === "heal") {
+    if (state.hearts >= state.maxHearts) {
+      alert("Số tim của em đang đầy rồi!");
+      return;
+    }
+    state.gold -= price;
+    state.hearts = Math.min(state.maxHearts, state.hearts + 2);
+    playTone("good");
+    saveState();
+    alert(`🧪 Đã hồi phục +2 tim! Hiện tại em có ${state.hearts}/${state.maxHearts} tim.`);
+    return;
+  }
+  state.gold -= price;
+  state.items[itemKey] = (state.items[itemKey] || 0) + 1;
+  playTone("good");
+  saveState();
+  alert("🎉 Mua vật phẩm thành công!");
+}
+
+function renderBadgesAndVault() {
+  document.getElementById("vaultHeartStat").textContent = `❤️ ${state.hearts}/${state.maxHearts} tim`;
+  document.getElementById("vaultCountLabel").textContent = state.wrongIds.length;
+
+  const btnVault = document.getElementById("btnStartVaultPractice");
+  if (state.wrongIds.length === 0) {
+    btnVault.disabled = true;
+    btnVault.textContent = "✅ KHO ĐANG TRỐNG (KHÔNG CÓ CÂU SAI)";
+  } else {
+    btnVault.disabled = false;
+    btnVault.textContent = `⚔️ LUYỆN TẬP ${state.wrongIds.length} CÂU TRONG KHO ĐỂ LẤY TIM`;
+  }
+
+  const notesDiv = document.getElementById("wrongNotesList");
+  if (state.wrongIds.length === 0) {
+    notesDiv.innerHTML = `<div style="color:var(--success);">🌟 Tuyệt vời! Hiện tại em không có câu nào làm sai trong kho.</div>`;
+  } else {
+    notesDiv.innerHTML = state.wrongIds.map((id, idx) => {
+      const q = QUESTIONS.find(item => item.id === id);
+      if (!q) return "";
+      return `<div style="border-bottom:1px solid #eee; padding:8px 0;">
+        <strong>Câu ${idx + 1} (Ải ${q.stage}):</strong> ${q.q}<br>
+        <span style="color:#a04000; font-size:16.5px;">👉 Bấm nút "Luyện tập câu trong kho để lấy tim" ở trên để giải lại và nhận +1 ❤️!</span>
+      </div>`;
+    }).join("");
+  }
+
+  const grid = document.getElementById("badgesGrid");
+  grid.innerHTML = "";
+  STAGES.forEach(st => {
+    const unlocked = Boolean(state.stageBest[st.id]?.passed);
+    const card = document.createElement("div");
+    card.className = `badge-card ${unlocked ? "" : "locked"}`;
+    card.innerHTML = `
+      <div style="font-size:40px;">💎</div>
+      <strong>${st.gem}</strong>
+      <div style="font-size:15px; color:var(--muted); margin-top:4px;">${unlocked ? "✅ Đã khôi phục" : "🔒 Chưa mở khóa"}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function renderProfile() {
+  const sc = computeScores();
+  const wc = WARRIOR_CLASSES[state.warriorClass] || WARRIOR_CLASSES.chien_binh;
+  document.getElementById("profAvatar").textContent = state.mascot;
+  document.getElementById("profName").textContent = state.name;
+  document.getElementById("profInfo").textContent = `Lớp ${state.className} • THCS Nam Đàn`;
+  document.getElementById("profWarriorBadge").textContent = `${wc.icon} Thần chiến: ${wc.name} (❤️ ${state.hearts}/${state.maxHearts} tim)`;
+  document.getElementById("profTotal10").textContent = `${sc.total10.toFixed(1)}/10`;
+  document.getElementById("profXP").textContent = state.xp;
+  document.getElementById("profGold").textContent = state.gold;
+}
+
+// ==================== TỰ ĐỘNG GỬI KẾT QUẢ & TRANG GIÁO VIÊN ====================
+function getWeakestTopicText(topicStats) {
+  let worst = "Chưa có dữ liệu";
+  let lowestAcc = 1.1;
+  const names = {
+    1: "Dạng 1: Góc tam giác",
+    2: "Dạng 2: Tam giác bằng nhau",
+    3: "Dạng 3: Tam giác vuông",
+    4: "Dạng 4: Tam giác cân & Trung trực"
+  };
+  for (let k = 1; k <= 4; k++) {
+    const st = topicStats[k];
+    if (st && st.total > 0) {
+      const acc = st.right / st.total;
+      if (acc < lowestAcc) {
+        lowestAcc = acc;
+        worst = `${names[k]} (${Math.round(acc * 100)}% đúng)`;
+      }
+    }
+  }
+  return worst;
+}
+
+function getChosenLevelSummary() {
+  const wc = WARRIOR_CLASSES[state.warriorClass] || WARRIOR_CLASSES.chien_binh;
+  const lvls = [];
+  for (let s = 1; s <= 4; s++) {
+    if (state.stageBest[s]?.level === "thuong") lvls.push("Thường");
+    else if (state.stageBest[s]?.level === "de") lvls.push("Dễ");
+  }
+  const lvlTxt = lvls.length === 0 ? "Chưa chơi" : (lvls.filter(x => x === "Thường").length >= 2 ? "Mức Thường" : "Mức Dễ");
+  return `${wc.name} • ${lvlTxt}`;
+}
+
+async function autoSendToTeacher() {
+  if (!state.name) return;
+  const sc = computeScores();
+  const payload = {
+    timestamp: new Date().toLocaleString("vi-VN"),
+    name: state.name,
+    className: state.className,
+    chosenLevel: getChosenLevelSummary(),
+    completedStages: countCompletedStages(),
+    totalCorrect40: sc.totalCorrect40,
+    quizPoints: sc.quizPoints,
+    bonusPoints: sc.bonusPoints,
+    total10: sc.total10,
+    xp: state.xp,
+    gold: state.gold,
+    weakTopic: getWeakestTopicText(state.topicStats),
+    topicStats: state.topicStats,
+    level: Math.floor(state.xp / 1000) + 1,
+    skillStats: state.skillStats || {},
+    wrongCount: (state.wrongIds || []).length,
+    stageBest: state.stageBest
+  };
+
+  let records = JSON.parse(localStorage.getItem("vq_tamgiac_teacher_records") || "[]");
+  const idx = records.findIndex(r => r.name === state.name && r.className === state.className);
+  if (idx >= 0) records[idx] = payload;
+  else records.push(payload);
+  localStorage.setItem("vq_tamgiac_teacher_records", JSON.stringify(records));
+
+  const sendUrl = GAS_URL || state.gasUrl;
+  if (sendUrl) {
+    try {
+      await fetch(sendUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {}
+  }
+}
+
+function openTeacherDashboardDirect() {
+  if (state.name) autoSendToTeacher();
+  document.getElementById("app").classList.add("teacher-wide");
+  document.getElementById("topBar").style.display = "none";
+  document.getElementById("bottomNav").style.display = "none";
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById("screen-teacher").classList.add("active");
+  document.getElementById("gasUrlInput").value = state.gasUrl || GAS_URL || "";
+  document.getElementById("teacherDirectUrl").textContent = window.location.href.split("?")[0].split("#")[0] + "?gv=1";
+  renderTeacherAnalytics();
+}
+
+function exitTeacherLinkMode() {
+  document.getElementById("app").classList.remove("teacher-wide");
+  try {
+    window.history.replaceState(null, "", window.location.pathname);
+  } catch (e) {}
+  goHomeScreen();
+}
+
+function saveGasUrl() {
+  state.gasUrl = document.getElementById("gasUrlInput").value.trim();
+  saveState();
+}
+
+async function fetchTeacherResults() {
+  const url = document.getElementById("gasUrlInput").value.trim();
+  const key = document.getElementById("teacherKeyInput").value.trim();
+  const statusEl = document.getElementById("teacherFetchStatus");
+
+  if (!url) {
+    statusEl.textContent = "⚠️ Chưa nhập URL Google Apps Script (/exec).";
+    return;
+  }
+  if (!key) {
+    statusEl.textContent = "⚠️ Hãy nhập mật khẩu giáo viên rồi bấm Tải kết quả.";
+    return;
+  }
+
+  statusEl.textContent = "⏳ Đang tải kết quả từ Google Sheets...";
+  try {
+    const joiner = url.includes("?") ? "&" : "?";
+    const res = await fetch(url + joiner + "key=" + encodeURIComponent(key), { cache: "no-store" });
+    const data = await res.json();
+
+    if (Array.isArray(data)) {
+      const validRecords = data.filter(r => r && r.name && r.className);
+      localStorage.setItem("vq_tamgiac_teacher_records", JSON.stringify(validRecords));
+      statusEl.textContent = `✅ Đã tải ${validRecords.length} kết quả học sinh từ Google Sheets.`;
+      renderTeacherAnalytics();
+    } else {
+      statusEl.textContent = "⚠️ " + (data.error || "Máy chủ không trả về danh sách kết quả.");
+    }
+  } catch (e) {
+    statusEl.textContent = "⚠️ Không kết nối được. Kiểm tra URL /exec, quyền Web app và kết nối mạng.";
+  }
+}
+
+function renderTeacherAnalytics() {
+  const filterClass = document.getElementById("teacherClassFilter").value;
+  let allRecords = JSON.parse(localStorage.getItem("vq_tamgiac_teacher_records") || "[]");
+  let records = filterClass === "ALL" ? allRecords : allRecords.filter(r => r.className === filterClass);
+  records.sort((a, b) => (b.total10 || 0) - (a.total10 || 0));
+
+  const totalStudents = records.length;
+  let totalQuestionsDone = 0;
+  let finished4Count = 0;
+  records.forEach(r => {
+    if (r.completedStages >= 4) finished4Count++;
+    if (r.topicStats) {
+      for (let k = 1; k <= 4; k++) totalQuestionsDone += (r.topicStats[k]?.total || 0);
+    } else {
+      totalQuestionsDone += (r.totalCorrect40 || 0);
+    }
+  });
+
+  document.getElementById("teacherKpiGrid").innerHTML = `
+    <div class="kpi-card">
+      <div class="kpi-val">${totalStudents} em</div>
+      <div class="kpi-lbl">Đã tham gia luyện tập (${filterClass === "ALL" ? "toàn khối 7" : "lớp " + filterClass})</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">${totalQuestionsDone.toLocaleString("vi-VN")}</div>
+      <div class="kpi-lbl">Lượt câu hỏi các em đã tự giải</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">${finished4Count} em</div>
+      <div class="kpi-lbl">Đã đi hết cả 4/4 vùng đất (Ải)</div>
+    </div>
+  `;
+
+  const classes = ["7A", "7B", "7C", "7D", "7E"];
+  document.getElementById("teacherClassProg").innerHTML = classes.map(cls => {
+    const clsRecs = allRecords.filter(r => r.className === cls);
+    let qCnt = 0;
+    clsRecs.forEach(r => {
+      if (r.topicStats) for (let k = 1; k <= 4; k++) qCnt += (r.topicStats[k]?.total || 0);
+    });
+    const pct = Math.min(100, Math.round((clsRecs.length / 40) * 100));
+    return `
+      <div class="class-prog-card">
+        <div style="display:flex; justify-content:space-between; font-size:16px;">
+          <strong>Lớp ${cls}</strong>
+          <span><strong>${clsRecs.length} em</strong> đã chơi • ${qCnt} câu</span>
+        </div>
+        <div class="bar-bg" style="height:10px;"><div class="bar-fill" style="width:${pct}%; background:#138d75;"></div></div>
+      </div>
+    `;
+  }).join("");
+
+  const tbody = document.querySelector("#tblLeaderboard tbody");
+  if (records.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:var(--muted);">Chưa có dữ liệu học sinh cho lớp này.</td></tr>`;
+  } else {
+    tbody.innerHTML = records.map((r, i) => `
+      <tr>
+        <td><strong>#${i + 1}</strong></td>
+        <td><strong>${r.name}</strong></td>
+        <td>${r.className}</td>
+        <td>${r.chosenLevel || "Dễ"}</td>
+        <td><strong>${(r.quizPoints ?? 0).toFixed(1)}</strong>/8.0 đ (${r.totalCorrect40 || 0}/40)</td>
+        <td style="color:#1e8449;">+${(r.bonusPoints ?? 0).toFixed(1)}/2.0 đ</td>
+        <td style="color:#154360; font-weight:bold; font-size:19px;">${(r.total10 ?? 0).toFixed(1)}/10</td>
+        <td style="color:var(--danger);">${r.weakTopic || "Đang cập nhật"}</td>
+      </tr>
+    `).join("");
+  }
+
+  const topicLabels = {
+    1: "Dạng 1: Tổng 3 góc & Góc ngoài tam giác",
+    2: "Dạng 2: Tam giác bằng nhau (c.c.c, c.g.c, g.c.g)",
+    3: "Dạng 3: Các trường hợp bằng nhau tam giác vuông",
+    4: "Dạng 4: Tam giác cân, Đều & Đường trung trực"
+  };
+
+  const agg = { 1: { right: 0, total: 0, weakStudents: [] }, 2: { right: 0, total: 0, weakStudents: [] }, 3: { right: 0, total: 0, weakStudents: [] }, 4: { right: 0, total: 0, weakStudents: [] } };
+
+  records.forEach(r => {
+    if (r.topicStats) {
+      for (let k = 1; k <= 4; k++) {
+        const st = r.topicStats[k];
+        if (st && st.total > 0) {
+          agg[k].right += st.right || 0;
+          agg[k].total += st.total || 0;
+          const acc = st.right / st.total;
+          if (acc < 0.7) {
+            agg[k].weakStudents.push(`${r.name} (${r.className} - ${Math.round((1 - acc) * 100)}% sai)`);
+          }
+        }
+      }
+    }
+  });
+
+  const supportTbody = document.querySelector("#tblSupportNeeded tbody");
+  supportTbody.innerHTML = [1, 2, 3, 4].map(k => {
+    const chips = agg[k].weakStudents.length > 0
+      ? agg[k].weakStudents.map(s => `<span class="student-chip">${s}</span>`).join(" ")
+      : `<span style="color:var(--success); font-size:16px;">✅ Cả lớp nắm vững dạng này</span>`;
+    return `
+      <tr>
+        <td><strong>${topicLabels[k]}</strong></td>
+        <td>${chips}</td>
+      </tr>
+    `;
+  }).join("");
+
+  const barsDiv = document.getElementById("topicErrorBars");
+  barsDiv.innerHTML = [1, 2, 3, 4].map(k => {
+    const tot = agg[k].total;
+    const wrong = tot - agg[k].right;
+    const errPct = tot > 0 ? Math.round((wrong / tot) * 100) : 0;
+    return `
+      <div style="margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; font-size:17px;">
+          <strong>${topicLabels[k]}</strong>
+          <span style="color:var(--danger); font-weight:bold;">Tỉ lệ sai: ${errPct}% (${wrong}/${tot} lượt)</span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" style="width:${errPct}%;"></div></div>
+      </div>
+    `;
+  }).join("");
+}
+
+function exportTeacherCSV() {
+  let records = JSON.parse(localStorage.getItem("vq_tamgiac_teacher_records") || "[]");
+  if (records.length === 0) {
+    alert("Chưa có dữ liệu để xuất!");
+    return;
+  }
+  let csv = "\uFEFFHọ và tên,Lớp,Thần chiến & Mức độ,Số câu đúng (/40),Điểm câu hỏi (/8đ),Điểm quy đổi XP-Vàng (/2đ),Tổng điểm (/10đ),XP,Vàng,Dạng bài yếu nhất,Thời gian\n";
+  records.forEach(r => {
+    csv += `"${r.name}","${r.className}","${r.chosenLevel || ""}",${r.totalCorrect40 || 0},${(r.quizPoints ?? 0).toFixed(1)},${(r.bonusPoints ?? 0).toFixed(1)},${(r.total10 ?? 0).toFixed(1)},${r.xp},${r.gold},"${r.weakTopic}","${r.timestamp}"\n`;
+  });
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "Thong_Ke_Vuong_Quoc_Tam_Giac_Toan7.csv";
+  link.click();
+}
+
+// ==================== KHỞI TẠO ====================
+(function initApp() {
+  const params = new URLSearchParams(window.location.search);
+  const hash = window.location.hash.toLowerCase();
+  if (params.get("gv") === "1" || params.get("teacher") === "1" || hash.includes("giaovien") || hash.includes("gv")) {
+    openTeacherDashboardDirect();
+    return;
+  }
+  renderHomeScreen();
+})();
+</script>
+</body>
+</html>
