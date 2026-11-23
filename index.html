@@ -1344,8 +1344,8 @@
           🔗 <strong>Đường dẫn truy cập trực tiếp Trang Giáo Viên:</strong> <code id="teacherDirectUrl" style="color:#154360;">?gv=1</code>
         </div>
         <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-          <input type="text" id="gasUrlInput" class="form-input" style="font-size:16px; padding:7px 10px; flex:2; min-width:260px;" placeholder="https://script.google.com/macros/s/AKfycbx7jrLn0mBEu1rMyGGrtHMo3oOFtcrxWt4AzQYxTBi94L3HoHFgn0mNXD4PBDkBM4Hcpg/exec " onchange="saveGasUrl()">
-          <input type="password" id="teacherKeyInput" class="form-input" style="font-size:16px; padding:7px 10px; flex:1; min-width:180px;" placeholder="Mật khẩu giáo viên">
+          <input type="text" id="gasUrlInput" class="form-input" style="font-size:16px; padding:7px 10px; flex:2; min-width:260px;" placeholder="https://script.google.com/macros/s/AKfycbzonifO50XtD-BAb4ygD51bxiniEIhIrMhOPqQp94JEKYYeX18g5qSZPdEK2RxG09gorg/exec " onchange="saveGasUrl()">
+          <input type="password" id="teacherKeyInput" class="form-input" style="display:none;" placeholder="Mật khẩu giáo viên (không bắt buộc)">
         </div>
         <div id="teacherFetchStatus" style="font-size:15px; color:var(--primary); margin-top:4px;"></div>
       </div>
@@ -1450,7 +1450,7 @@ const QUESTIONS = [{"id": 1, "stage": 1, "level": "de", "type": "mcq", "topic": 
 // ====== CẤU HÌNH GỬI KẾT QUẢ VỀ GIÁO VIÊN ======
 // Dán URL Web App của Google Apps Script (kết thúc bằng /exec) vào đây một lần duy nhất.
 // Học sinh KHÔNG cần nhập gì cả: kết quả tự gửi về Google Sheets sau mỗi câu/ải.
-const GAS_URL = "https://script.google.com/macros/s/AKfycbyAtwLPcs7KaKs9fV1haV-KpDxX8i1dfhrSw5xxxytqv6Ip-HvKuEx_frXoAZoNnhpDgw/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzonifO50XtD-BAb4ygD51bxiniEIhIrMhOPqQp94JEKYYeX18g5qSZPdEK2RxG09gorg/exec";
 
 // 8 dạng bài dùng để thống kê cho giáo viên (không ảnh hưởng điểm/XP/vàng của trò chơi)
 const SKILL_GROUPS = {"D1": [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 14, 15, 16, 17, 18, 65, 66], "D2": [8, 12, 13, 19, 20], "D3": [21, 22, 24, 25, 27, 29, 34, 36, 46, 47, 64, 78], "D4": [23, 26, 28, 30, 31, 32, 33, 35, 37, 38, 39, 40, 74, 79], "D5": [41, 42, 43, 44, 45, 48, 49, 50, 51, 52, 69, 76], "D6": [53, 54, 55, 56, 57, 58, 59, 60, 77], "D7": [61, 63, 68, 70, 71, 72, 73, 75], "D8": [62, 67, 80]};
@@ -1704,7 +1704,7 @@ function startNewGame() {
     alert("Vui lòng nhập họ và tên của em trước khi lên đường!");
     return;
   }
-  const clsVal = document.getElementById("inpClass").value;
+  const clsVal = String(document.getElementById("inpClass").value || "").trim().toUpperCase();
   const mascotVal = state.mascot || "🦊";
   const wClassVal = state.warriorClass || "chien_binh";
   const wcInfo = WARRIOR_CLASSES[wClassVal] || WARRIOR_CLASSES.chien_binh;
@@ -2553,7 +2553,7 @@ async function autoSendToTeacher() {
   const payload = {
     timestamp: new Date().toLocaleString("vi-VN"),
     name: state.name,
-    className: state.className,
+    className: String(state.className || "").trim().toUpperCase(),
     chosenLevel: getChosenLevelSummary(),
     completedStages: countCompletedStages(),
     totalCorrect40: sc.totalCorrect40,
@@ -2623,15 +2623,11 @@ async function fetchTeacherResults() {
     statusEl.textContent = "⚠️ Chưa nhập URL Google Apps Script (/exec).";
     return;
   }
-  if (!key) {
-    statusEl.textContent = "⚠️ Hãy nhập mật khẩu giáo viên rồi bấm Tải kết quả.";
-    return;
-  }
-
   statusEl.textContent = "⏳ Đang tải kết quả từ Google Sheets...";
   try {
     const joiner = url.includes("?") ? "&" : "?";
-    const res = await fetch(url + joiner + "key=" + encodeURIComponent(key), { cache: "no-store" });
+    const fetchUrl = key ? (url + joiner + "key=" + encodeURIComponent(key)) : url;
+    const res = await fetch(fetchUrl, { cache: "no-store" });
     const data = await res.json();
 
     if (Array.isArray(data)) {

@@ -79,8 +79,8 @@
       <label style="font-size:14px"><input type="checkbox" id="chkAuto"> tự cập nhật mỗi phút</label>
     </div>
     <div class="setup" id="setup" hidden>
-      <input type="text" id="inUrl" placeholder="https://script.google.com/macros/s/AKfycbx7jrLn0mBEu1rMyGGrtHMo3oOFtcrxWt4AzQYxTBi94L3HoHFgn0mNXD4PBDkBM4Hcpg/exec">
-      <input type="password" id="inKey" placeholder="Mật khẩu giáo viên">
+      <input type="text" id="inUrl" placeholder="https://script.google.com/macros/s/AKfycbzonifO50XtD-BAb4ygD51bxiniEIhIrMhOPqQp94JEKYYeX18g5qSZPdEK2RxG09gorg/exec">
+      <input type="password" id="inKey" placeholder="Mật khẩu giáo viên (tùy chọn)" style="display:none">
     </div>
     <div class="status" id="status"></div>
   </div>
@@ -113,7 +113,7 @@
 <script>
 /* =================== CẤU HÌNH – THẦY/CÔ CHỈ CẦN SỬA Ở ĐÂY =================== */
 const CONFIG = {
-  GAS_URL: "https://script.google.com/macros/s/AKfycbx7jrLn0mBEu1rMyGGrtHMo3oOFtcrxWt4AzQYxTBi94L3HoHFgn0mNXD4PBDkBM4Hcpg/exec",                      // dán URL Apps Script (/exec) vào đây để khỏi phải nhập mỗi lần
+  GAS_URL: "https://script.google.com/macros/s/AKfycbzonifO50XtD-BAb4ygD51bxiniEIhIrMhOPqQp94JEKYYeX18g5qSZPdEK2RxG09gorg/exec",                      // dán URL Apps Script (/exec) vào đây để khỏi phải nhập mỗi lần
   CLASS_SIZES: { "7A": 32, "7B": 32, "7C": 32, "7D": 32, "7E": 30 },   // sĩ số từng lớp
   PASS_ACCURACY: 0.7,               // dưới 70% đúng thì "cần hỗ trợ"
   MIN_ATTEMPTS: 2                   // phải làm ít nhất 2 câu của dạng đó mới xét
@@ -132,6 +132,9 @@ const SKILLS = [
 ];
 const CLASS_COLORS = ["#c9473f", "#0f6b62", "#d29a1a", "#3b6fb6", "#7a4fa3", "#2f9e6f"];
 
+function normCls(c) {
+  return String(c == null ? "" : c).trim().toUpperCase();
+}
 function esc(s) {
   return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
@@ -149,14 +152,15 @@ function starsOf(r) {
 }
 function classList(records) {
   const set = new Set(Object.keys(CONFIG.CLASS_SIZES));
-  records.forEach(r => r.className && set.add(r.className));
+  records.forEach(r => { const c = normCls(r.className); if (c) set.add(c); });
   return ["7A", "7B", "7C", "7D", "7E"];
 }
 
 /** Tổng hợp mọi số liệu cho một lớp (hoặc ALL). */
 function aggregate(records, filter) {
-  const recs = filter === "ALL" ? records : records.filter(r => r.className === filter);
-  const classes = filter === "ALL" ? classList(records) : [filter];
+  const fNorm = normCls(filter);
+  const recs = fNorm === "ALL" ? records : records.filter(r => normCls(r.className) === fNorm);
+  const classes = fNorm === "ALL" ? classList(records) : [fNorm];
   const sizeSum = classes.reduce((a, c) => a + (CONFIG.CLASS_SIZES[c] || 0), 0);
 
   const byClass = {};
@@ -169,7 +173,8 @@ function aggregate(records, filter) {
   recs.forEach(r => {
     const q = recQuestions(r);
     questions += q;
-    if (byClass[r.className]) { byClass[r.className].n++; byClass[r.className].q += q; }
+    const rCls = normCls(r.className);
+    if (byClass[rCls]) { byClass[rCls].n++; byClass[rCls].q += q; }
     if (starsOf(r) >= 4) finished4++;
     let worst = null;
     SKILLS.forEach(s => {
@@ -177,15 +182,15 @@ function aggregate(records, filter) {
       if (!st || !st.total) return;
       const bucket = skill[s.k];
       bucket.all.right += st.right; bucket.all.total += st.total;
-      const cb = bucket.cls[r.className] || (bucket.cls[r.className] = { right: 0, total: 0 });
+      const cb = bucket.cls[rCls] || (bucket.cls[rCls] = { right: 0, total: 0 });
       cb.right += st.right; cb.total += st.total;
       if (st.total >= CONFIG.MIN_ATTEMPTS) {
         const acc = st.right / st.total;
-        if (acc < CONFIG.PASS_ACCURACY) bucket.support.push({ name: r.name, cls: r.className, err: Math.round((1 - acc) * 100) });
+        if (acc < CONFIG.PASS_ACCURACY) bucket.support.push({ name: r.name, cls: rCls, err: Math.round((1 - acc) * 100) });
         if (!worst || acc < worst.acc) worst = { acc, k: s.k, err: Math.round((1 - acc) * 100) };
       }
     });
-    if (worst) weakest.push({ name: r.name, cls: r.className, k: worst.k, err: worst.err });
+    if (worst) weakest.push({ name: r.name, cls: rCls, k: worst.k, err: worst.err });
   });
 
   const errOf = b => b.total ? (b.total - b.right) / b.total : 0;
@@ -246,7 +251,7 @@ function render() {
   $("classProg").innerHTML = A.classes.map((c, i) => {
     const b = A.byClass[c], w = b.size ? Math.min(100, Math.round(b.n / b.size * 100)) : 0;
     return `<div class="cls"><div class="top"><strong>${esc(c)}</strong><span><b>${b.n}/${b.size} em</b> đã chơi · ${b.q.toLocaleString("vi-VN")} câu</span></div>
-      <small>sĩ số ${b.size} · ĐTB ${avg10(A.recs.filter(r => r.className === c)).toFixed(1)}</small><div class="track"><i style="width:${w}%;background:${CLASS_COLORS[i % CLASS_COLORS.length]}"></i></div></div>`;
+      <small>sĩ số ${b.size} · ĐTB ${avg10(A.recs.filter(r => normCls(r.className) === c)).toFixed(1)}</small><div class="track"><i style="width:${w}%;background:${CLASS_COLORS[i % CLASS_COLORS.length]}"></i></div></div>`;
   }).join("");
 
   const sorted = A.recs.slice().sort((a, b) => String(a.className).localeCompare(b.className) || String(a.name).localeCompare(b.name, "vi"));
@@ -261,7 +266,7 @@ function render() {
   $("tblScore").querySelector("tbody").innerHTML = body || '<tr><td colspan="11" class="empty">Chưa có dữ liệu.</td></tr>';
 
   // biểu đồ cột nhóm
-  const activeCls = A.classes.filter(c => A.recs.some(r => r.className === c));
+  const activeCls = A.classes.filter(c => A.recs.some(r => normCls(r.className) === c));
   $("legend").innerHTML = activeCls.map(c => `<span style="--c:${CLASS_COLORS[A.classes.indexOf(c) % CLASS_COLORS.length]}">${esc(c)}</span>`).join("");
   $("chart").innerHTML = A.recs.length === 0 ? '<div class="empty">Chưa có dữ liệu. Bấm “Tải kết quả” hoặc “Xem dữ liệu mẫu”.</div>' :
     A.order.map(k => {
@@ -298,15 +303,15 @@ function setStatus(t) { $("status").textContent = t; }
 async function load() {
   const url = (CONFIG.GAS_URL || $("inUrl").value).trim();
   const key = $("inKey").value.trim();
-  if (!url) { $("setup").hidden = false; setStatus("ℹ️ Hãy dán URL Apps Script và mật khẩu giáo viên, rồi bấm “Tải kết quả”."); return; }
-  if (!key) { $("setup").hidden = false; setStatus("ℹ️ Hãy nhập mật khẩu giáo viên."); return; }
-  try { localStorage.setItem("gv_url", url); localStorage.setItem("gv_key", key); } catch (e) {}
+  if (!url) { $("setup").hidden = false; setStatus("ℹ️ Hãy dán URL Apps Script rồi bấm “Tải kết quả”."); return; }
+  try { localStorage.setItem("gv_url", url); if (key) localStorage.setItem("gv_key", key); } catch (e) {}
   setStatus("⏳ Đang tải kết quả từ Google Sheets…");
   try {
-    const res = await fetch(url + (url.includes("?") ? "&" : "?") + "key=" + encodeURIComponent(key), { cache: "no-store" });
+    const fetchUrl = key ? (url + (url.includes("?") ? "&" : "?") + "key=" + encodeURIComponent(key)) : url;
+    const res = await fetch(fetchUrl, { cache: "no-store" });
     const data = await res.json();
     if (Array.isArray(data)) {
-      RECORDS = data;
+      RECORDS = data.map(r => Object.assign({}, r, { className: normCls(r.className) }));
       setStatus(`✅ Đã tải ${data.length} học sinh • cập nhật lúc ${new Date().toLocaleTimeString("vi-VN")}`);
       render();
     } else setStatus("⚠️ " + (data.error || "Không đọc được dữ liệu"));
@@ -340,10 +345,10 @@ $("chkAuto").onchange = e => { clearInterval(timer); if (e.target.checked) timer
   try { $("inUrl").value = localStorage.getItem("gv_url") || ""; $("inKey").value = localStorage.getItem("gv_key") || ""; } catch (e) {}
   const haveUrl = !!(CONFIG.GAS_URL || $("inUrl").value);
   if (CONFIG.GAS_URL) { $("inUrl").style.display = "none"; $("setup").style.gridTemplateColumns = "1fr"; }
-  $("setup").hidden = haveUrl && !!$("inKey").value;
+  $("setup").hidden = haveUrl;
   render();
-  if (haveUrl && $("inKey").value) load();
-  else { $("setup").hidden = false; setStatus("ℹ️ Nhập URL Apps Script + mật khẩu giáo viên rồi bấm “Tải kết quả” (hoặc bấm “Xem dữ liệu mẫu” để xem thử)."); }
+  if (haveUrl) load();
+  else { $("setup").hidden = false; setStatus("ℹ️ Nhập URL Apps Script rồi bấm “Tải kết quả” (hoặc bấm “Xem dữ liệu mẫu” để xem thử)."); }
 })();
 </script>
 </body>
